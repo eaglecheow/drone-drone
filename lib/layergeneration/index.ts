@@ -76,15 +76,16 @@ export const mapGrid = (
         let z = xzDistance * Math.sin(angle);
 
         let targetX = Math.floor(x * gridSize[0]);
-        let targetZ = Math.floor((z * gridSize[1]) / 10);
+        let targetZ = Math.floor(z * gridSize[1]);
 
         // console.log(targetX);
+        // console.log(targetZ);
 
         let xRange = gridSize[0] / 2;
 
-        if (targetZ <= gridSize[1] && Math.abs(targetX) < xRange) {
-            targetX = targetX + Math.ceil(xRange);
-            console.log(targetX);
+        if (targetZ < gridSize[1] && Math.abs(targetX) <= Math.floor(xRange)) {
+            // targetX = targetX + Math.floor(xRange);
+            // console.log(targetX);
             layerObstacleGrid[targetZ][targetX] = 1;
         }
     });

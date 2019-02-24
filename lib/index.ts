@@ -11,6 +11,7 @@ server.listen(PORT, HOST, () => {
 
 server.on("connection", async sock => {
     sock.on("data", data => {
+        console.log(data.toString());
         codeTest(data.toString());
     });
 
