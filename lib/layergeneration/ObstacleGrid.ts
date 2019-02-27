@@ -73,9 +73,10 @@ export class ObstacleGrid {
         this._gridData[obstacleZ][obstacleX] = 1;
     };
 
-    public setObstacleWithValue = (obstacleLocation: number[]): void => {
-        const obstacleXReal = obstacleLocation[0];
-        const obstacleZReal = obstacleLocation[1];
+    public setObstacleWithValue = (range: number, angle: number): void => {
+        const obstacleXReal = range * Math.cos(angle);
+        const obstacleZReal = range * Math.sin(angle);
+
         const lengthX = this._gridData[0].length;
         const lengthZ = this._gridData.length;
 

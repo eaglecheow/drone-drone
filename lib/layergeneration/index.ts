@@ -1,10 +1,5 @@
 import { ObstacleCategory } from "./ObstacleCategory";
 import { ObstacleGrid } from "./ObstacleGrid";
-export interface ObstacleData {
-    obstacleLocation: number[][];
-    obstacleDistance: number[];
-    obstacleAngle: number[];
-}
 
 const mapGrid = (
     layerObstacle: number[][],
@@ -14,12 +9,22 @@ const mapGrid = (
 ): number[][] => {
     let obstacleGrid = new ObstacleGrid(gridSize, rangeMin, rangeMax);
     layerObstacle.forEach(obstacle => {
-        obstacleGrid.setObstacleWithValue(obstacle);
+        obstacleGrid.setObstacleWithValue(obstacle[0], obstacle[1]);
     });
 
     return obstacleGrid.gridData;
 };
 
+export { ObstacleCategory, ObstacleGrid, mapGrid };
+
+/** DEPRECATED */
+// export interface ObstacleData {
+//     obstacleLocation: number[][];
+//     obstacleDistance: number[];
+//     obstacleAngle: number[];
+// }
+
+/** DEPRECATED */
 // export interface ObstacleCategory {
 //     level1: number[][];
 //     level2: number[][];
@@ -110,5 +115,3 @@ const mapGrid = (
 
 //     return layerObstacleGrid;
 // };
-
-export { ObstacleCategory, ObstacleGrid, mapGrid };
