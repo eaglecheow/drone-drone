@@ -68,12 +68,18 @@ export const mapGrid = (
 ) => {
     let layerObstacleGrid = gridGenerator(gridSize);
     // console.log(layerObstacleGrid);
+
+    let zValues: number[] = [];
+
     layerObstacle.forEach(obstacle => {
         const xzDistance = obstacle[0];
         const angle = obstacle[1];
 
         let x = xzDistance * Math.cos(angle);
         let z = xzDistance * Math.sin(angle);
+
+        zValues.push(z);
+        // console.log(`X: ${x} Z: ${z}`);
 
         let targetX = Math.floor(x * gridSize[0]);
         let targetZ = Math.floor(z * gridSize[1]);
@@ -83,13 +89,22 @@ export const mapGrid = (
 
         let xRange = gridSize[0] / 2;
 
-        if (targetZ < gridSize[1] && Math.abs(targetX) <= Math.floor(xRange)) {
-            targetX = targetX + Math.floor(xRange);
+        if (
+            targetZ < gridSize[1] &&
+            Math.abs(targetX) <= Math.floor(xRange) &&
+            targetZ >= 0
+        ) {
+            targetX = targetX + Math.floor(xRange) - 1;
             // console.log(targetX);
-            console.log(`X: ${targetX}, Z: ${targetZ}`);
+            // console.log(`X: ${targetX}, Z: ${targetZ}`);
             layerObstacleGrid[targetZ][targetX] = 1;
         }
+
+        // console.log(`Max: ${Math.max(...zValues)}`);
+        // console.log(`Min: ${Math.min(...zValues)}`);
+        // console.log(`Diff: ${Math.max(...zValues) - Math.min(...zValues)}`);
     });
 
+    console.log(`Mean: ${zValues.reduce((a, b) => a + b, 0) / zValues.length}`);
     return layerObstacleGrid;
 };

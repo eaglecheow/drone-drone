@@ -19,4 +19,12 @@ import { codeTest } from "./test";
 //     });
 // });
 
-codeTest();
+let startTime = Date.now();
+
+for (let i = 0; i < 1000; i++) {
+    codeTest();
+}
+
+let endTime = Date.now();
+
+console.log("Time elapsed: ", endTime - startTime);

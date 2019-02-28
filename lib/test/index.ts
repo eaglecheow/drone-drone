@@ -1,5 +1,6 @@
 import { tcpMessageParser } from "../helper/tcpMessageParser";
 import { mapGrid } from "../layergeneration";
+import { findPath } from "../pathfinding";
 
 const exampleString =
     "M:-0.199406,-0.0930125,0.442039,0.484934,1.97533,:-0.199406,-0.0930125,0.442039,0.484934,1.97533,:";
@@ -13,7 +14,11 @@ const exampleString3 =
 export const codeTest = (stringData: string = exampleString2) => {
     let obstacleMap = tcpMessageParser(stringData).level2;
 
-    let obstacleGrid = mapGrid(obstacleMap, [5, 30]);
+    let obstacleGrid = mapGrid(obstacleMap, [11, 30]);
 
     console.log(obstacleGrid);
+
+    let path = findPath(obstacleGrid, [3, 0], [6, 29]);
+
+    console.log("Path: ", path);
 };
