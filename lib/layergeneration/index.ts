@@ -1,14 +1,36 @@
-export interface ObstacleData {
-    obstacleLocation: number[][];
-    obstacleDistance: number[];
-    obstacleAngle: number[];
-}
+import { ObstacleCategory } from "./ObstacleCategory";
+import { ObstacleGrid } from "./ObstacleGrid";
 
-export interface ObstacleCategory {
-    level1: number[][];
-    level2: number[][];
-    level3: number[][];
-}
+const mapGrid = (
+    layerObstacle: number[][],
+    gridSize: [number, number],
+    rangeMin: [number, number],
+    rangeMax: [number, number]
+): number[][] => {
+    // console.log(layerObstacle);
+    let obstacleGrid = new ObstacleGrid(gridSize, rangeMin, rangeMax);
+    layerObstacle.forEach(obstacle => {
+        obstacleGrid.setObstacleWithValue(obstacle[0], obstacle[1]);
+    });
+
+    return obstacleGrid.gridData;
+};
+
+export { ObstacleCategory, ObstacleGrid, mapGrid };
+
+/** DEPRECATED */
+// export interface ObstacleData {
+//     obstacleLocation: number[][];
+//     obstacleDistance: number[];
+//     obstacleAngle: number[];
+// }
+
+/** DEPRECATED */
+// export interface ObstacleCategory {
+//     level1: number[][];
+//     level2: number[][];
+//     level3: number[][];
+// }
 
 /** DEPRECATED */
 // /**
@@ -41,70 +63,56 @@ export interface ObstacleCategory {
 //     return obstacleCategory;
 // };
 
-/**
- * Generates a grid of 0s in a specific size
- * @param gridSize Grid size to generate
- */
-export const gridGenerator = (gridSize: [number, number]): number[][] => {
-    let gridTemplate: number[][] = [];
-    for (let i = 0; i < gridSize[1]; i++) {
-        gridTemplate[i] = [];
-        for (let j = 0; j < gridSize[0]; j++) {
-            gridTemplate[i].push(0);
-        }
-    }
+/** DEPRECATED */
+// /**
+//  * Generates a grid of 0s in a specific size
+//  * @param gridSize Grid size to generate
+//  */
+// export const gridGenerator = (gridSize: [number, number]): number[][] => {
+//     let gridTemplate: number[][] = [];
+//     for (let i = 0; i < gridSize[1]; i++) {
+//         gridTemplate[i] = [];
+//         for (let j = 0; j < gridSize[0]; j++) {
+//             gridTemplate[i].push(0);
+//         }
+//     }
 
-    return gridTemplate;
-};
+//     return gridTemplate;
+// };
 
-/**
- * Maps the obstacle to a grid
- * @param layerObstacle Obstacle list if a certain layer
- * @param gridSize Size of the grid to be generated
- */
-export const mapGrid = (
-    layerObstacle: number[][],
-    gridSize: [number, number]
-) => {
-    let layerObstacleGrid = gridGenerator(gridSize);
-    // console.log(layerObstacleGrid);
+/** DEPRECATED */
+// /**
+//  * Maps the obstacle to a grid
+//  * @param layerObstacle Obstacle list if a certain layer
+//  * @param gridSize Size of the grid to be generated
+//  */
+// export const mapGrid = (
+//     layerObstacle: number[][],
+//     gridSize: [number, number]
+// ) => {
+//     let layerObstacleGrid = gridGenerator(gridSize);
+//     // console.log(layerObstacleGrid);
+//     layerObstacle.forEach(obstacle => {
+//         const xzDistance = obstacle[0];
+//         const angle = obstacle[1];
 
-    let zValues: number[] = [];
+//         let x = xzDistance * Math.cos(angle);
+//         let z = xzDistance * Math.sin(angle);
 
-    layerObstacle.forEach(obstacle => {
-        const xzDistance = obstacle[0];
-        const angle = obstacle[1];
+//         let targetX = Math.floor(x * gridSize[0]);
+//         let targetZ = Math.floor(z * gridSize[1]);
 
-        let x = xzDistance * Math.cos(angle);
-        let z = xzDistance * Math.sin(angle);
+//         console.log(`X: ${x}, Z: ${z}`);
 
-        zValues.push(z);
-        // console.log(`X: ${x} Z: ${z}`);
+//         let xRange = gridSize[0] / 2;
 
-        let targetX = Math.floor(x * gridSize[0]);
-        let targetZ = Math.floor(z * gridSize[1]);
+//         if (targetZ < gridSize[1] && Math.abs(targetX) <= Math.floor(xRange)) {
+//             targetX = targetX + Math.floor(xRange);
+//             // console.log(targetX);
+//             // console.log(`X: ${targetX}, Z: ${targetZ}`);
+//             layerObstacleGrid[targetZ][targetX] = 1;
+//         }
+//     });
 
-        // console.log(targetX);
-        // console.log(targetZ);
-
-        let xRange = gridSize[0] / 2;
-
-        if (
-            targetZ < gridSize[1] &&
-            Math.abs(targetX) <= Math.floor(xRange) &&
-            targetZ >= 0
-        ) {
-            targetX = targetX + Math.floor(xRange) - 1;
-            // console.log(targetX);
-            // console.log(`X: ${targetX}, Z: ${targetZ}`);
-            layerObstacleGrid[targetZ][targetX] = 1;
-        }
-
-        // console.log(`Max: ${Math.max(...zValues)}`);
-        // console.log(`Min: ${Math.min(...zValues)}`);
-        // console.log(`Diff: ${Math.max(...zValues) - Math.min(...zValues)}`);
-    });
-
-    console.log(`Mean: ${zValues.reduce((a, b) => a + b, 0) / zValues.length}`);
-    return layerObstacleGrid;
-};
+//     return layerObstacleGrid;
+// };

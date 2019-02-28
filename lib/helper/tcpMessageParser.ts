@@ -1,6 +1,9 @@
-import { ObstacleCategory } from "../layergeneration/index";
-
-export const tcpMessageParser = (tcpString: string): ObstacleCategory => {
+/**
+ * TO BE DEPRECATED
+ * Parses TCP string to obstacle object
+ * @param tcpString TCP String
+ */
+export const tcpMessageParser = (tcpString: string) => {
     const layer = tcpString[0];
     let obstacleCollectionString = tcpString.slice(2, tcpString.length - 1);
     let obstacleStringArray = obstacleCollectionString.split(":");
