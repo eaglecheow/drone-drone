@@ -77,6 +77,8 @@ export class ObstacleGrid {
         const obstacleXReal = range * Math.cos(angle);
         const obstacleZReal = range * Math.sin(angle);
 
+        // console.log(`X: ${obstacleXReal}, Z: ${obstacleZReal}`);
+
         const lengthX = this._gridData[0].length;
         const lengthZ = this._gridData.length;
 

@@ -13,7 +13,7 @@ const exampleString3 =
 export const codeTest = (stringData: string = exampleString3) => {
     let obstacleMap = tcpMessageParser(stringData).level2;
 
-    let obstacleGrid = mapGrid(obstacleMap, [5, 30], [-3, 0], [3, 10]);
+    let obstacleGrid = mapGrid(obstacleMap, [10, 30], [-1, 0], [1, 2]);
 
     console.log(obstacleGrid);
 };
