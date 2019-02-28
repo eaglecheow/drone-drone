@@ -50,6 +50,8 @@ export class ObstacleGrid {
     public setObstacleWithIndex = (
         obstacleLocation: [number, number]
     ): void => {
+        // console.log(obstacleLocation);
+
         const obstacleX = obstacleLocation[0];
         const obstacleZ = obstacleLocation[1];
 
@@ -74,10 +76,14 @@ export class ObstacleGrid {
     };
 
     public setObstacleWithValue = (range: number, angle: number): void => {
+        // console.log("range: ", range);
+        // console.log("angle: ", angle);
+
         const obstacleXReal = range * Math.cos(angle);
         const obstacleZReal = range * Math.sin(angle);
 
-        // console.log(`X: ${obstacleXReal}, Z: ${obstacleZReal}`);
+        // console.log("obstacleXReal: ", obstacleXReal);
+        // console.log("obstacleZReal: ", obstacleZReal);
 
         const lengthX = this._gridData[0].length;
         const lengthZ = this._gridData.length;

@@ -7,6 +7,7 @@ const mapGrid = (
     rangeMin: [number, number],
     rangeMax: [number, number]
 ): number[][] => {
+    // console.log(layerObstacle);
     let obstacleGrid = new ObstacleGrid(gridSize, rangeMin, rangeMax);
     layerObstacle.forEach(obstacle => {
         obstacleGrid.setObstacleWithValue(obstacle[0], obstacle[1]);

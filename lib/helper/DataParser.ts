@@ -4,7 +4,7 @@ export class DataParser {
     static stringToObstacle = (tcpString: string): ObstacleCategory => {
         let obstacleCategory = new ObstacleCategory();
 
-        const layerStringArray = tcpString.split("|");
+        const layerStringArray = tcpString.split("+");
         layerStringArray.forEach(layerString => {
             const obstacleCollectionString = layerString.slice(
                 2,
@@ -21,8 +21,8 @@ export class DataParser {
                 // const xAxis = parseFloat(dataArray[0]);
                 // const yAxis = parseFloat(dataArray[1]);
                 // const zAxis = parseFloat(dataArray[2]);
-                const xzDistance = parseFloat(dataArray[3]);
-                const angle = parseFloat(dataArray[4]);
+                const xzDistance = parseFloat(dataArray[0]);
+                const angle = parseFloat(dataArray[1]);
 
                 return [xzDistance, angle];
             });
