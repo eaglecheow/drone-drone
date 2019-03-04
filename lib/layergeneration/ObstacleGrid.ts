@@ -115,51 +115,52 @@ export class ObstacleGrid {
         });
     };
 
-    public setObstacleWithValue = (range: number, angle: number): void => {
-        // console.log("range: ", range);
-        // console.log("angle: ", angle);
+    /** DEPRECATED */
+    // public setObstacleWithValue = (range: number, angle: number): void => {
+    //     // console.log("range: ", range);
+    //     // console.log("angle: ", angle);
 
-        const obstacleXReal = range * Math.cos(angle);
-        const obstacleZReal = range * Math.sin(angle);
+    //     const obstacleXReal = range * Math.cos(angle);
+    //     const obstacleZReal = range * Math.sin(angle);
 
-        // console.log("obstacleXReal: ", obstacleXReal);
-        // console.log("obstacleZReal: ", obstacleZReal);
+    //     // console.log("obstacleXReal: ", obstacleXReal);
+    //     // console.log("obstacleZReal: ", obstacleZReal);
 
-        const lengthX = this._gridData[0].length;
-        const lengthZ = this._gridData.length;
+    //     const lengthX = this._gridData[0].length;
+    //     const lengthZ = this._gridData.length;
 
-        const gridRangeX = this._gridRangeMax[0] - this._gridRangeMin[0];
-        const gridRangeZ = this._gridRangeMax[1] - this._gridRangeMin[1];
+    //     const gridRangeX = this._gridRangeMax[0] - this._gridRangeMin[0];
+    //     const gridRangeZ = this._gridRangeMax[1] - this._gridRangeMin[1];
 
-        if (
-            obstacleXReal < this._gridRangeMin[0] ||
-            obstacleXReal > this._gridRangeMax[0]
-        ) {
-            console.warn(
-                `X value out of provided range, obstacle not assigned [x = ${obstacleXReal}]`
-            );
-            return;
-        }
+    //     if (
+    //         obstacleXReal < this._gridRangeMin[0] ||
+    //         obstacleXReal > this._gridRangeMax[0]
+    //     ) {
+    //         console.warn(
+    //             `X value out of provided range, obstacle not assigned [x = ${obstacleXReal}]`
+    //         );
+    //         return;
+    //     }
 
-        if (
-            obstacleZReal < this._gridRangeMin[1] ||
-            obstacleZReal > this._gridRangeMax[1]
-        ) {
-            console.warn(
-                `Z value out of provided range, obstacle not assigned [z = ${obstacleZReal}]`
-            );
-            return;
-        }
+    //     if (
+    //         obstacleZReal < this._gridRangeMin[1] ||
+    //         obstacleZReal > this._gridRangeMax[1]
+    //     ) {
+    //         console.warn(
+    //             `Z value out of provided range, obstacle not assigned [z = ${obstacleZReal}]`
+    //         );
+    //         return;
+    //     }
 
-        let targetX =
-            Math.ceil(
-                (obstacleXReal - this._gridRangeMin[0]) * (lengthX / gridRangeX)
-            ) - 1;
-        let targetZ =
-            Math.ceil(
-                (obstacleZReal - this._gridRangeMin[1]) * (lengthZ / gridRangeZ)
-            ) - 1;
+    //     let targetX =
+    //         Math.ceil(
+    //             (obstacleXReal - this._gridRangeMin[0]) * (lengthX / gridRangeX)
+    //         ) - 1;
+    //     let targetZ =
+    //         Math.ceil(
+    //             (obstacleZReal - this._gridRangeMin[1]) * (lengthZ / gridRangeZ)
+    //         ) - 1;
 
-        this.setObstacleWithIndex([targetX, targetZ]);
-    };
+    //     this.setObstacleWithIndex([targetX, targetZ]);
+    // };
 }

@@ -1,28 +1,29 @@
-import { ObstacleCategory, ObstacleCategoryIt2 } from "./ObstacleCategory";
+import { ObstacleCategory } from "./ObstacleCategory";
 import { ObstacleGrid } from "./ObstacleGrid";
 import { GridHelper } from "./GridHelper";
 
+/** DEPRECATED */
+// const mapGrid = (
+//     layerObstacle: number[][],
+//     gridSize: [number, number],
+//     rangeMin: [number, number],
+//     rangeMax: [number, number]
+// ): number[][] => {
+//     // let zArray: number[] = []; //*
+//     let obstacleGrid = new ObstacleGrid(gridSize, rangeMin, rangeMax);
+//     layerObstacle.forEach(obstacle => {
+//         // let z = obstacle[0] * Math.sin(obstacle[1]); //*
+//         // zArray.push(z);
+
+//         obstacleGrid.setObstacleWithValue(obstacle[0], obstacle[1]);
+//     });
+
+//     // console.log("Z: ", zArray.reduce((a, b) => a + b, 0) / zArray.length);
+
+//     return obstacleGrid.gridData;
+// };
+
 const mapGrid = (
-    layerObstacle: number[][],
-    gridSize: [number, number],
-    rangeMin: [number, number],
-    rangeMax: [number, number]
-): number[][] => {
-    // let zArray: number[] = []; //*
-    let obstacleGrid = new ObstacleGrid(gridSize, rangeMin, rangeMax);
-    layerObstacle.forEach(obstacle => {
-        // let z = obstacle[0] * Math.sin(obstacle[1]); //*
-        // zArray.push(z);
-
-        obstacleGrid.setObstacleWithValue(obstacle[0], obstacle[1]);
-    });
-
-    // console.log("Z: ", zArray.reduce((a, b) => a + b, 0) / zArray.length);
-
-    return obstacleGrid.gridData;
-};
-
-const mapGridIt2 = (
     layerObstacle: number[],
     gridSize: [number, number],
     rangeMin: [number, number],
@@ -41,9 +42,9 @@ export {
     ObstacleCategory,
     ObstacleGrid,
     mapGrid,
-    mapGridIt2,
+    // mapGridIt2,
     GridHelper,
-    ObstacleCategoryIt2
+    // ObstacleCategoryIt2
 };
 
 /** DEPRECATED */

@@ -1,5 +1,5 @@
 import { tcpMessageParser } from "../deprecated/tcpMessageParser";
-import { mapGrid, mapGridIt2 } from "../layergeneration";
+import { mapGrid } from "../layergeneration";
 import { findPath } from "../pathfinding";
 import { DataParser } from "../helper/DataParser";
 import { testObstacleGrid } from "../layergeneration/test";
@@ -34,7 +34,7 @@ export const codeTest = (stringData: string = exampleString4) => {
     // }
 
     let obstacleMap = DataParser.stringToGrid(stringData, [3, 5]).level2;
-    let obstacleGrid = mapGridIt2(obstacleMap, [5, 30], [0, 0], [5, 2]);
+    let obstacleGrid = mapGrid(obstacleMap, [5, 30], [0, 0], [5, 2]);
 
     console.log(obstacleGrid);
 };
