@@ -1,11 +1,10 @@
-// import { categorizeArea, mapGrid } from "../index";
-// import { testInputData } from "./exampleData";
+import { ObstacleGrid } from "../ObstacleGrid";
+import { ObstacleGlobal } from "../ObstacleGlobal";
 
-// export const testLayerGeneration = () => {
-//     const layer2 = categorizeArea(testInputData.obstacleLocation, 10).level2;
-
-//     const layer2ObstacleGrid = mapGrid(layer2, [10, 10]);
-
-//     console.log("Layer 2 Obstacle Grid: ");
-//     console.log(layer2ObstacleGrid);
-// };
+export const testObstacleGrid = () => {
+    let obstacleGrid = new ObstacleGrid([10, 10], [-1, 0], [1, 10]);
+    let obstacleGlobal = new ObstacleGlobal(obstacleGrid, [
+        3.905545,
+        102.731842
+    ]);
+};

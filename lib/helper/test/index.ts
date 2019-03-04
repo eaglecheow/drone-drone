@@ -1,4 +1,4 @@
-import { tcpMessageParser } from "../tcpMessageParser";
+import { tcpMessageParser } from "../../deprecated/tcpMessageParser";
 
 const exampleString =
     "M:-0.199406,-0.0930125,0.442039,0.484934,1.97533,:-0.199406,-0.0930125,0.442039,0.484934,1.97533,:";
@@ -8,5 +8,5 @@ const exampleString2 =
 
 export const helperTest = () => {
     let parseResult = tcpMessageParser(exampleString2);
-    console.log(parseResult);
+    // console.log(parseResult);
 };

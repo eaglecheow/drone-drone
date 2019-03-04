@@ -1,5 +1,6 @@
-import { ObstacleCategory } from "./ObstacleCategory";
+import { ObstacleCategory, ObstacleCategoryIt2 } from "./ObstacleCategory";
 import { ObstacleGrid } from "./ObstacleGrid";
+import { GridHelper } from "./GridHelper";
 
 const mapGrid = (
     layerObstacle: number[][],
@@ -21,7 +22,29 @@ const mapGrid = (
     return obstacleGrid.gridData;
 };
 
-export { ObstacleCategory, ObstacleGrid, mapGrid };
+const mapGridIt2 = (
+    layerObstacle: number[],
+    gridSize: [number, number],
+    rangeMin: [number, number],
+    rangeMax: [number, number]
+): number[][] => {
+    let obstacleGrid = new ObstacleGrid(gridSize, rangeMin, rangeMax);
+
+    // console.log("layerObstacle: ", layerObstacle);
+
+    obstacleGrid.setObstacleWithLayerData(layerObstacle);
+
+    return obstacleGrid.gridData;
+};
+
+export {
+    ObstacleCategory,
+    ObstacleGrid,
+    mapGrid,
+    mapGridIt2,
+    GridHelper,
+    ObstacleCategoryIt2
+};
 
 /** DEPRECATED */
 // export interface ObstacleData {

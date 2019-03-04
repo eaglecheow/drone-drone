@@ -1,6 +1,45 @@
-import { ObstacleCategory } from "../layergeneration";
+import { ObstacleCategory, GridHelper, ObstacleCategoryIt2 } from "../layergeneration";
 
 export class DataParser {
+    public static stringToGrid = (
+        tcpString: string,
+        gridSize: [number, number]
+    ): ObstacleCategoryIt2 => {
+        const stringArray = tcpString.split(",");
+        const numberArray = stringArray.map(stringValue =>
+            parseFloat(stringValue)
+        );
+
+        let gridTemplate = GridHelper.generateGrid([gridSize[1], gridSize[0]], 0);
+
+        // console.log("Grid Template: ", gridTemplate);
+
+        let row = 0;
+        let column = 0;
+
+        for (let i = 0; i < numberArray.length - 1; i++) {
+            gridTemplate[row][column] = numberArray[i];
+            column++;
+            if (column > gridTemplate[0].length - 1) {
+                column = 0;
+                row++;
+            }
+        }
+
+        let obstacleCategory = new ObstacleCategoryIt2();
+        obstacleCategory.level1 = gridTemplate[0];
+        obstacleCategory.level2 = gridTemplate[1];
+        obstacleCategory.level3 = gridTemplate[2];
+
+        // console.log("Obstacle Category: ", obstacleCategory);
+
+        return obstacleCategory;
+    };
+
+    /**
+     * Parses TCP string to obstacle data readable for the script
+     * @param tcpString Input TCP string
+     */
     static stringToObstacle = (tcpString: string): ObstacleCategory => {
         let obstacleCategory = new ObstacleCategory();
 
