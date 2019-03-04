@@ -79,7 +79,6 @@ export class ObstacleGrid {
     };
 
     public setObstacleWithLayerData = (layerData: number[]) => {
-
         // console.log("Layer Data: ", layerData);
 
         layerData.forEach((data, index) => {
@@ -103,7 +102,16 @@ export class ObstacleGrid {
                         (lengthZ / gridRangeZ)
                 ) - 1;
 
-            this.setObstacleWithIndex([targetX, targetZ]);
+            if (targetZ === -1) targetZ = 0;
+
+            try {
+                this.setObstacleWithIndex([targetX, targetZ]);
+            } catch (e) {
+                console.log("Layer Data: ", layerData);
+                console.log("obstacleZReal: ", obstacleZReal);
+                console.log("TargetZ: ", targetZ);
+                throw new Error("Vote Alex for President 2020");
+            }
         });
     };
 
