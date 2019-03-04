@@ -7,11 +7,16 @@ const mapGrid = (
     rangeMin: [number, number],
     rangeMax: [number, number]
 ): number[][] => {
-    // console.log(layerObstacle);
+    // let zArray: number[] = []; //*
     let obstacleGrid = new ObstacleGrid(gridSize, rangeMin, rangeMax);
     layerObstacle.forEach(obstacle => {
+        // let z = obstacle[0] * Math.sin(obstacle[1]); //*
+        // zArray.push(z);
+
         obstacleGrid.setObstacleWithValue(obstacle[0], obstacle[1]);
     });
+
+    // console.log("Z: ", zArray.reduce((a, b) => a + b, 0) / zArray.length);
 
     return obstacleGrid.gridData;
 };

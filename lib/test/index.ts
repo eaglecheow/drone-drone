@@ -18,7 +18,7 @@ export const codeTest = (stringData: string = exampleString3) => {
     // console.log("obstacleMap: ", JSON.stringify(obstacleMap));
 
     try {
-        let obstacleGrid = mapGrid(obstacleMap, [5, 30], [-1, 0], [1, 10]);
+        let obstacleGrid = mapGrid(obstacleMap, [10, 30], [-2, 0], [2, 10]);
         console.log(obstacleGrid);
 
         let path = findPath(obstacleGrid, [2, 0], [2, 29]);
