@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/geolib": "^2.0.23",
     "@types/node": "^11.9.5",
     "@types/pathfinding": "0.0.2",
     "pathfinding": "^0.4.18"

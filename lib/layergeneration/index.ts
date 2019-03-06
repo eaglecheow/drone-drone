@@ -1,6 +1,7 @@
 import { ObstacleCategory } from "./ObstacleCategory";
 import { ObstacleGrid } from "./ObstacleGrid";
 import { GridHelper } from "./GridHelper";
+import { ObstacleGlobal } from "./ObstacleGlobal";
 
 /** DEPRECATED */
 // const mapGrid = (
@@ -27,11 +28,18 @@ const mapGrid = (
     layerObstacle: number[],
     gridSize: [number, number],
     rangeMin: [number, number],
-    rangeMax: [number, number]
+    rangeMax: [number, number],
+    currentLocation: [number, number],
+    referenceDistance: number,
+    referenceBearing: number
 ): number[][] => {
     let obstacleGrid = new ObstacleGrid(gridSize, rangeMin, rangeMax);
-
-    // console.log("layerObstacle: ", layerObstacle);
+    let obstacleGlobal = new ObstacleGlobal(
+        obstacleGrid,
+        currentLocation,
+        referenceDistance,
+        referenceBearing
+    );
 
     obstacleGrid.setObstacleWithLayerData(layerObstacle);
 
@@ -43,7 +51,7 @@ export {
     ObstacleGrid,
     mapGrid,
     // mapGridIt2,
-    GridHelper,
+    GridHelper
     // ObstacleCategoryIt2
 };
 
