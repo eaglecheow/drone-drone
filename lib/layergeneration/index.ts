@@ -1,7 +1,37 @@
 import { ObstacleCategory } from "./ObstacleCategory";
-import { ObstacleGrid } from "./ObstacleGrid";
+import { RelativeObstacleGrid } from "./RelativeObstacleGrid";
 import { GridHelper } from "./GridHelper";
-import { ObstacleGlobal } from "./ObstacleGlobal";
+import { GlobalObstacleGrid } from "./GlobalObstacleGrid";
+
+const mapGrid = (
+    layerObstacle: number[],
+    gridSize: [number, number],
+    rangeMin: [number, number],
+    rangeMax: [number, number],
+    currentLocation: [number, number],
+    referenceDistance: number,
+    referenceBearing: number
+): number[][][] => {
+    let obstacleGrid = new RelativeObstacleGrid(gridSize, rangeMin, rangeMax);
+
+    obstacleGrid.setObstacleWithLayerData(layerObstacle);
+    let obstacleGlobal = new GlobalObstacleGrid(
+        obstacleGrid,
+        currentLocation,
+        referenceDistance,
+        referenceBearing
+    );
+
+    return obstacleGlobal.globalGrid;
+};
+
+export {
+    ObstacleCategory,
+    RelativeObstacleGrid,
+    GlobalObstacleGrid,
+    mapGrid,
+    GridHelper
+};
 
 /** DEPRECATED */
 // const mapGrid = (
@@ -23,37 +53,6 @@ import { ObstacleGlobal } from "./ObstacleGlobal";
 
 //     return obstacleGrid.gridData;
 // };
-
-const mapGrid = (
-    layerObstacle: number[],
-    gridSize: [number, number],
-    rangeMin: [number, number],
-    rangeMax: [number, number],
-    currentLocation: [number, number],
-    referenceDistance: number,
-    referenceBearing: number
-): number[][][] => {
-    let obstacleGrid = new ObstacleGrid(gridSize, rangeMin, rangeMax);
-
-    obstacleGrid.setObstacleWithLayerData(layerObstacle);
-    let obstacleGlobal = new ObstacleGlobal(
-        obstacleGrid,
-        currentLocation,
-        referenceDistance,
-        referenceBearing
-    );
-
-    return obstacleGlobal.globalGrid;
-};
-
-export {
-    ObstacleCategory,
-    ObstacleGrid,
-    mapGrid,
-    // mapGridIt2,
-    GridHelper
-    // ObstacleCategoryIt2
-};
 
 /** DEPRECATED */
 // export interface ObstacleData {

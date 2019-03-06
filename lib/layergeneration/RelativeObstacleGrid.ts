@@ -1,6 +1,6 @@
 import { GridHelper } from "./GridHelper";
 
-export class ObstacleGrid {
+export class RelativeObstacleGrid {
     constructor(
         gridSize: [number, number],
         rangeMin: [number, number],

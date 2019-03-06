@@ -1,16 +1,20 @@
 import { GridHelper } from "./GridHelper";
-import { ObstacleGrid } from "./ObstacleGrid";
+import { RelativeObstacleGrid } from "./RelativeObstacleGrid";
 import geolib from "geolib";
 
-export class ObstacleGlobal {
-    private _relativeGrid: number[][] = [];
+export class GlobalObstacleGrid {
+    private _relativeGrid: number[][];
     private _globalGrid: number[][][] = [];
-    private _currentLocation: [number, number] = [0, 0];
-    private _referenceDistance: number = 1;
-    private _referenceBearing: number = 0;
+    private _currentLocation: [number, number];
+    private _referenceDistance: number;
+    private _referenceBearing: number;
 
     public get relativeGrid(): number[][] {
         return this._relativeGrid;
+    }
+
+    public set relativeGrid(value: number[][]) {
+        this._relativeGrid = value;
     }
 
     public get globalGrid(): number[][][] {
@@ -45,7 +49,7 @@ export class ObstacleGlobal {
     }
 
     constructor(
-        obstacleGrid: ObstacleGrid,
+        obstacleGrid: RelativeObstacleGrid,
         currentLocation: [number, number],
         referenceDistance: number,
         referenceBearing: number

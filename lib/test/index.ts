@@ -3,7 +3,7 @@ import { mapGrid } from "../layergeneration";
 import { findPath } from "../pathfinding";
 import { DataParser } from "../helper/DataParser";
 // import { testObstacleGrid } from "../layergeneration/test";
-import { ObstacleGlobal } from "../layergeneration/ObstacleGlobal";
+import { GlobalObstacleGrid } from "../layergeneration/GlobalObstacleGrid";
 
 const exampleString =
     "M:-0.199406,-0.0930125,0.442039,0.484934,1.97533,:-0.199406,-0.0930125,0.442039,0.484934,1.97533,:";
