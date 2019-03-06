@@ -11,7 +11,7 @@ const mapGrid = (
     currentLocation: [number, number],
     referenceDistance: number,
     referenceBearing: number
-): number[][][] => {
+): GlobalObstacleGrid => {
     let obstacleGrid = new RelativeObstacleGrid(gridSize, rangeMin, rangeMax);
 
     obstacleGrid.setObstacleWithLayerData(layerObstacle);
@@ -22,7 +22,7 @@ const mapGrid = (
         referenceBearing
     );
 
-    return obstacleGlobal.globalGrid;
+    return obstacleGlobal;
 };
 
 export {

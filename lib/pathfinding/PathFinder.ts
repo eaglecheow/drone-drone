@@ -12,6 +12,8 @@ export class PathFinder {
 
     public set obstacleGrid(value: GlobalObstacleGrid) {
         this._obstacleGrid = value;
+        this.findRelativePath();
+        this.matchRelativePathToGlobal();
     }
 
     public get relativePath(): number[][] {
@@ -24,6 +26,8 @@ export class PathFinder {
 
     constructor(obstacleGrid: GlobalObstacleGrid) {
         this._obstacleGrid = obstacleGrid;
+        this.findRelativePath();
+        this.matchRelativePathToGlobal();
     }
 
     private findRelativePath(): void {
@@ -48,9 +52,20 @@ export class PathFinder {
     }
 
     private matchRelativePathToGlobal(): void {
+        let relativePath = this._relativePath;
+        let globalGrid = this._obstacleGrid.globalGrid;
 
-        
+        let globalPath: number[][] = [];
 
-        throw new Error("Not Implemented");
+        relativePath.forEach((relativePoint, index) => {
+            const indexX = relativePoint[0];
+            const indexZ = relativePoint[1];
+
+            const coordinate = globalGrid[indexZ][indexX];
+
+            globalPath[index] = [coordinate[0], coordinate[1]];
+        });
+
+        this._globalPath = globalPath;
     }
 }
