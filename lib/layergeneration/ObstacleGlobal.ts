@@ -23,6 +23,7 @@ export class ObstacleGlobal {
 
     public set currentLocation(value: [number, number]) {
         this._currentLocation = value;
+        this.convertRelativeToGlobal();
     }
 
     public get referenceDistance(): number {
@@ -31,6 +32,7 @@ export class ObstacleGlobal {
 
     public set referenceDistance(value: number) {
         this._referenceDistance = value;
+        this.convertRelativeToGlobal();
     }
 
     public get referenceBearing(): number {
@@ -39,6 +41,7 @@ export class ObstacleGlobal {
 
     public set referenceBearing(value: number) {
         this._referenceBearing = value;
+        this.convertRelativeToGlobal();
     }
 
     constructor(
@@ -51,7 +54,7 @@ export class ObstacleGlobal {
         this._currentLocation = currentLocation;
         this._referenceDistance = referenceDistance;
         this._referenceBearing = referenceBearing;
-        this.convertRelativeToGlobal(1, 0);
+        this.convertRelativeToGlobal();
     }
 
     private getBearing = (
@@ -85,10 +88,7 @@ export class ObstacleGlobal {
         return resultBearing;
     };
 
-    private convertRelativeToGlobal = (
-        referenceDistance: number,
-        referenceBearing: number
-    ): void => {
+    private convertRelativeToGlobal = (): void => {
         const gridLengthX = this._relativeGrid[0].length;
         let currentRelativeIndexX = 0;
         if (gridLengthX % 2 === 0) {
@@ -99,9 +99,13 @@ export class ObstacleGlobal {
 
         this._globalGrid = GridHelper.generateGrid<number[]>(
             [this._relativeGrid[0].length, this._relativeGrid.length],
-            [0, 0]
+            [0, 0, 0]
         );
-        this._globalGrid[0][currentRelativeIndexX] = this._currentLocation;
+        this._globalGrid[0][currentRelativeIndexX] = [
+            this._currentLocation[0],
+            this._currentLocation[1],
+            this._relativeGrid[0][currentRelativeIndexX]
+        ];
 
         for (let i = currentRelativeIndexX - 1; i >= 0; i--) {
             let initialPoint = {
@@ -111,13 +115,14 @@ export class ObstacleGlobal {
 
             let calculatedPoint = geolib.computeDestinationPoint(
                 initialPoint,
-                referenceDistance,
-                this.getBearing(referenceBearing, "west")
+                this._referenceDistance,
+                this.getBearing(this._referenceBearing, "west")
             );
 
             this._globalGrid[0][i] = [
                 calculatedPoint.latitude,
-                calculatedPoint.longitude
+                calculatedPoint.longitude,
+                this._relativeGrid[0][i]
             ];
         }
 
@@ -133,13 +138,14 @@ export class ObstacleGlobal {
 
             let calculatedPoint = geolib.computeDestinationPoint(
                 initialPoint,
-                referenceDistance,
-                this.getBearing(referenceBearing, "east")
+                this._referenceDistance,
+                this.getBearing(this._referenceBearing, "east")
             );
 
             this._globalGrid[0][i] = [
                 calculatedPoint.latitude,
-                calculatedPoint.longitude
+                calculatedPoint.longitude,
+                this._relativeGrid[0][i]
             ];
         }
 
@@ -152,17 +158,16 @@ export class ObstacleGlobal {
 
                 let calculatedPoint = geolib.computeDestinationPoint(
                     initialPoint,
-                    referenceDistance,
-                    this.getBearing(referenceBearing, "north")
+                    this._referenceDistance,
+                    this.getBearing(this._referenceBearing, "north")
                 );
 
                 this._globalGrid[i][index] = [
                     calculatedPoint.latitude,
-                    calculatedPoint.longitude
+                    calculatedPoint.longitude,
+                    this._relativeGrid[i][index]
                 ];
             });
         }
-
-        console.log("Global Grid: ", this._globalGrid);
     };
 }
