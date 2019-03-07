@@ -1,7 +1,7 @@
 import PathFinding from "pathfinding";
 import { GlobalObstacleGrid } from "../layergeneration";
 
-export class PathFinder {
+export class LevelPathFinder {
     private _obstacleGrid: GlobalObstacleGrid;
     private _relativePath: number[][] = [];
     private _globalPath: number[][] = [];

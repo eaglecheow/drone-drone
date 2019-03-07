@@ -4,7 +4,8 @@ import { findPath } from "../pathfinding";
 import { DataParser } from "../helper/DataParser";
 // import { testObstacleGrid } from "../layergeneration/test";
 import { GlobalObstacleGrid } from "../layergeneration/GlobalObstacleGrid";
-import { PathFinder } from "../pathfinding/PathFinder";
+import { LevelPathFinder } from "../pathfinding/LevelPathFinder";
+import { devConfig } from "../config";
 
 const exampleString =
     "M:-0.199406,-0.0930125,0.442039,0.484934,1.97533,:-0.199406,-0.0930125,0.442039,0.484934,1.97533,:";
@@ -47,15 +48,15 @@ export const codeTest = (stringData: string = exampleString4) => {
     let obstacleMap = DataParser.stringToGrid(stringData, [3, 5]).level2;
     let obstacleGrid = mapGrid(
         obstacleMap,
-        [5, 30],
-        [0, 0],
-        [5, 2],
-        [2.943999, 101.876484],
-        1,
-        0
+        devConfig.gridSize,
+        devConfig.rangeMin,
+        devConfig.rangeMax,
+        devConfig.currentLocation,
+        devConfig.referenceDistance,
+        devConfig.referenceBearing
     );
 
-    let pathFinder = new PathFinder(obstacleGrid);
+    let pathFinder = new LevelPathFinder(obstacleGrid);
     console.log(obstacleGrid.relativeGrid);
     console.log(pathFinder.globalPath);
 };
