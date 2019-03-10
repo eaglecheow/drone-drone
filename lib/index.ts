@@ -20,20 +20,12 @@ import { codeTest } from "./test";
 //     });
 // });
 
-// const droneServer = net.createServer();
-// droneServer.listen(DRONE_PORT, HOST, () => {
-//     console.log(`TCP Server for drone running at ${DRONE_PORT}:${PORT}`);
-// });
-
-// droneServer.on("connection", async sock => {
-//     //TODO: Write stuff here
-// })
-
 const startTime = Date.now();
 
-for (let i = 0; i < 100; i++) {
+// for (let i = 0; i < 100; i++) {
     codeTest();
-}
+    
+// }
 
 const endTime = Date.now();
 

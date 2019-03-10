@@ -75,6 +75,11 @@ export class RelativeObstacleGrid {
             return;
         }
 
+        //TODO: Uncomment this after Finder.ts is complete
+        // for (let i = obstacleZ; i < this._gridData.length; i++) {
+        //     this.gridData[i][obstacleX] = 1;
+        // }
+
         this._gridData[obstacleZ][obstacleX] = 1;
     };
 

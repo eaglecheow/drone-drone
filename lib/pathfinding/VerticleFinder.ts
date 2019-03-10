@@ -61,7 +61,7 @@ export class VerticleFinder {
         let globalObstacleGrid = mapGrid(
             layerObstacle,
             devConfig.gridSize,
-            devConfig.rangeMax,
+            devConfig.rangeMin,
             devConfig.rangeMax,
             devConfig.currentLocation,
             devConfig.referenceDistance,
@@ -90,6 +90,8 @@ export class VerticleFinder {
                 break;
             }
         }
+
+        if (!this._resultPath) this._resultPath = this.iterationPath;
 
         if (this._resultPath.relativePath.length <= 0) this._resultLevel = 0;
 
