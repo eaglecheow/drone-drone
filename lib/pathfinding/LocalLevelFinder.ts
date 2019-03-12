@@ -1,4 +1,4 @@
-import { GlobalObstacleGrid } from "layergeneration/GlobalObstacleGrid";
+import { GlobalObstacleGrid } from "../layergeneration/GlobalObstacleGrid";
 import PathFinding from "pathfinding";
 
 export class LocalLevelFinder {

@@ -1,6 +1,6 @@
-import { ObstacleCategory } from "layergeneration/ObstacleCategory";
-import { mapGrid } from "layergeneration";
-import { devConfig } from "config";
+import { ObstacleCategory } from "../layergeneration/ObstacleCategory";
+import { mapGrid } from "../layergeneration";
+import { devConfig } from "../config";
 
 export class VerticalLevelFinder {
     private _pathLevel: number = 0;

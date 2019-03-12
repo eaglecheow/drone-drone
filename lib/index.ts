@@ -1,32 +1,40 @@
-import * as net from "net";
-import { codeTest } from "./test";
+import { DataParser } from "./helper/DataParser";
+import { Finder } from "./pathfinding/Finder";
+import { devConfig } from "./config";
 
-// const PORT = 8080;
-// const DRONE_PORT = 8081;
-// const HOST = "127.0.0.1";
+export const iterate = (stringData: string, callback: Function) => {
+    if (stringData.length <= 0) return;
 
-// const server = net.createServer();
-// server.listen(PORT, HOST, () => {
-//     console.log(`TCP server running at ${HOST}:${PORT}`);
-// });
+    let obstacleCategory = DataParser.stringToGrid(stringData, [3, 5]);
+    let finder = new Finder(obstacleCategory);
 
-// server.on("connection", async sock => {
-//     sock.on("data", data => {
-//         codeTest(data.toString());
-//     });
+    callback(finder);
+};
 
-//     sock.on("close", () => {
-//         console.log("Socket closed");
-//     });
-// });
+interface ScaleValue {
+    gridSize: [number, number];
+    rangeMin: [number, number];
+    rangeMax: [number, number];
+    currentLocation: [number, number];
+    referenceDistance: number;
+    referenceBearing: number;
+}
 
-const startTime = Date.now();
+export class ServiceLayer {
+    //Default value, must be changed upon init
+    static scaleValue: ScaleValue = devConfig;
 
-// for (let i = 0; i < 100; i++) {
-    codeTest();
-    
-// }
+    /**
+     * Initialization Process of Service Layer
+     * 1. Check for keyframe and perform calculation for scaling purpose
+     * 2. Adjust scale value
+     * 3. 
+     */
+    public static init = () => {
+        //TODO: Write init implementation
+    }
 
-const endTime = Date.now();
-
-console.log(`Process finished in ${endTime - startTime}ms`);
+    public static adjustScaleValue = () => {
+        ServiceLayer.scaleValue.gridSize = [2, 2];
+    };
+}

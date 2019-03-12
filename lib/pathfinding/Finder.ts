@@ -1,6 +1,6 @@
-import { ObstacleCategory, mapGrid } from "layergeneration";
+import { ObstacleCategory, mapGrid } from "../layergeneration";
 import { VerticalLevelFinder } from "./VerticalLevelFinder";
-import { devConfig } from "config";
+import { devConfig } from "../config";
 import { LocalLevelFinder } from "./LocalLevelFinder";
 
 export class Finder {
