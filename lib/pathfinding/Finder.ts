@@ -8,6 +8,7 @@ export class Finder {
     private _targetPathRelative: number[][] = [];
     private _targetPathGlobal: number[][] = [];
     private _obstacleCategory: ObstacleCategory;
+    private _targetPathDirections: number[] = [];
 
     public get targetPathLevel(): number {
         return this._targetPathLevel;

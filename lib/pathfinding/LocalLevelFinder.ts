@@ -1,5 +1,7 @@
 import { GlobalObstacleGrid } from "../layergeneration/GlobalObstacleGrid";
 import PathFinding from "pathfinding";
+import { devConfig } from "../config";
+import geolib from "geolib";
 
 export class LocalLevelFinder {
     private _localLevelGrid: GlobalObstacleGrid;
@@ -28,6 +30,50 @@ export class LocalLevelFinder {
         this._localLevelGrid = localLevelGrid;
         this.findRelativePath();
         this.matchRelativePathToGlobal();
+    }
+
+    //TODO: Set endpoint relative to target point
+    private findEndPoint(): number[] {
+        let relativeGrid = this._localLevelGrid.relativeGrid;
+        let globalGrid = this._localLevelGrid.globalGrid;
+
+        let emptySpaceList: number[][] = [];
+
+        for (let i = 0; i < relativeGrid.length; i++) {
+            for (let j = 0; j < relativeGrid[i].length; j++) {
+                if (relativeGrid[i][j] === 0) {
+                    emptySpaceList.push([j, i]);
+                }
+            }
+        }
+
+        let distanceList: number[] = [];
+
+        emptySpaceList.forEach((emptySpaceIndex, itemIndex) => {
+            let localCoordinate = {
+                latitude: globalGrid[emptySpaceIndex[1]][emptySpaceIndex[0]][0],
+                longitude: globalGrid[emptySpaceIndex[1]][emptySpaceIndex[0]][1]
+            };
+            let endCoordinate = {
+                latitude: devConfig.endLocation[0],
+                longitude: devConfig.endLocation[1]
+            };
+
+            let distance = geolib.getDistance(localCoordinate, endCoordinate);
+
+            distanceList[itemIndex] = distance;
+        });
+
+        let smallestDistance = Math.min(...distanceList);
+        let smallestDistanceIndex = 0;
+
+        distanceList.forEach((distance, index) => {
+            if (distance === smallestDistance) {
+                smallestDistanceIndex = index;
+            }
+        });
+
+        return emptySpaceList[smallestDistanceIndex];
     }
 
     /**

@@ -34,7 +34,8 @@ server.on("connection", async sock => {
     sock.on("data", data => {
         iterate(data.toString(), () => {
             //TODO: Implement TCP string logic
-            droneClient.write("Hello");
+            // droneClient.write("Hello");
+            console.log("Sending stuff to drone...");
         });
     });
 
