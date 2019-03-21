@@ -54,14 +54,3 @@ server.on("connection", async sock => {
         console.log("Socket closed");
     });
 });
-
-// const startTime = Date.now();
-
-// // for (let i = 0; i < 100; i++) {
-//     codeTest();
-
-// // }
-
-// const endTime = Date.now();
-
-// console.log(`Process finished in ${endTime - startTime}ms`);
