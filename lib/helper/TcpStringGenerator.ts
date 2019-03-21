@@ -57,4 +57,6 @@ export class TcpStringGenerator {
 
         //|dist1|dist2|@|bearing1|bearing2|@|lat1,lng1|lat2,lng2|lat3,lng3|
     }
+
+    // public static 
 }
