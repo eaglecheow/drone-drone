@@ -23,11 +23,20 @@ export class ServiceLayer {
      */
     public static init = () => {
         //TODO: Write init implementation
+        throw new Error("Not Implemented");
     };
 
-    public static adjustScaleValue = () => {
-        ServiceLayer.scaleValue.gridSize = [2, 2];
+    public static adjustScaleValue = (stringData: string) => {
+        
+        let keyframeValue = DataParser.stringToKeyFrame(stringData);
+
+        throw new Error("Not Implemented");
     };
+
+    public static adjustCurrentLocation = () => {
+        ServiceLayer.scaleValue.currentLocation
+        throw new Error("Not Implemented");
+    }
 
     public static iterate = (
         stringData: string,

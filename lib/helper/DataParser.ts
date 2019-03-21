@@ -10,7 +10,10 @@ export class DataParser {
             parseFloat(stringValue)
         );
 
-        let gridTemplate = GridHelper.generateGrid([gridSize[1], gridSize[0]], 0);
+        let gridTemplate = GridHelper.generateGrid(
+            [gridSize[1], gridSize[0]],
+            0
+        );
 
         // console.log("Grid Template: ", gridTemplate);
 
@@ -34,6 +37,48 @@ export class DataParser {
         // console.log("Obstacle Category: ", obstacleCategory);
 
         return obstacleCategory;
+    };
+
+    //TODO: Implement logic after getting TCP string format
+    public static stringToStartEndLocation = (
+        tcpString: string
+    ): {
+        start: number[];
+        end: number[];
+    } => {
+        throw new Error("Not Implemented");
+    };
+
+    //TODO: Implement logic after getting TCP string format
+    public static stringToCurrentLocAndBearing = (
+        tcpString: string
+    ): {
+        currentLocation: number[];
+        bearing: number;
+    } => {
+        throw new Error("Not Implemented");
+    };
+
+    public static stringToKeyFrame = (
+        tcpString: string
+    ): {
+        x: number;
+        y: number;
+        z: number;
+    } => {
+        let inputString = tcpString.replace("K:", "");
+        let stringArray = inputString.split(",");
+
+        if (stringArray.length !== 3)
+            throw new Error("Invalid Keyframe TCP String");
+
+        let result = {
+            x: parseFloat(stringArray[0]),
+            y: parseFloat(stringArray[1]),
+            z: parseFloat(stringArray[2])
+        };
+
+        return result;
     };
 
     /** DEPRECATED */

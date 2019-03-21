@@ -22,8 +22,12 @@ const droneClient = net.createConnection(
 );
 
 droneClient.on("data", data => {
-    //TODO: Handle data from drone
-    droneClient.end();
+    let dataString = data.toString();
+    if (dataString.startsWith("@@")) {
+        /** Start Location and End Location */
+    } else {
+        /** Current location, current bearing */
+    }
 });
 
 droneClient.on("end", () => {
@@ -34,10 +38,11 @@ server.on("connection", async sock => {
     sock.on("data", data => {
         let dataString = data.toString();
 
-        //Keyframe
-        if (dataString.startsWith("##")) {
+        if (dataString.startsWith("K:")) {
+            /** Keyframe */
             //TODO: Handle keyframe
         } else {
+            /** Iteration */
             ServiceLayer.iterate(dataString, finder => {
                 const controlTcpString = TcpStringGenerator.finderToTCP(finder);
                 droneClient.write(controlTcpString);
