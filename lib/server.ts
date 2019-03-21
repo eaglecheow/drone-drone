@@ -1,6 +1,6 @@
 import * as net from "net";
-// import { codeTest } from "./test";
-import { iterate } from "./index";
+import { ServiceLayer } from "./index";
+import { TcpStringGenerator } from "./helper/TcpStringGenerator";
 
 const PORT = 8080;
 const DRONE_PORT = 8081;
@@ -32,11 +32,17 @@ droneClient.on("end", () => {
 
 server.on("connection", async sock => {
     sock.on("data", data => {
-        iterate(data.toString(), () => {
-            //TODO: Implement TCP string logic
-            // droneClient.write("Hello");
-            console.log("Sending stuff to drone...");
-        });
+        let dataString = data.toString();
+
+        //Keyframe
+        if (dataString.startsWith("##")) {
+            //TODO: Handle keyframe
+        } else {
+            ServiceLayer.iterate(dataString, finder => {
+                const controlTcpString = TcpStringGenerator.finderToTCP(finder);
+                droneClient.write(controlTcpString);
+            });
+        }
     });
 
     sock.on("close", () => {

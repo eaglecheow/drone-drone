@@ -55,4 +55,6 @@ export class TcpStringGenerator {
 
         return `${distanceString}@${bearingString}@${coordinateString}`;
     }
+
+    // public static 
 }
