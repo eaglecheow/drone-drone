@@ -6,7 +6,7 @@ interface ScaleValue {
     gridSize: [number, number];
     rangeMin: [number, number];
     rangeMax: [number, number];
-    currentLocation: [number, number];
+    currentLocation: number[];
     referenceDistance: number;
     referenceBearing: number;
 }
@@ -14,6 +14,52 @@ interface ScaleValue {
 export class ServiceLayer {
     //Default value, must be changed upon init
     static scaleValue: ScaleValue = devConfig;
+
+    private static _isInit: boolean = false;
+    private static _currentLocation: number[] = [0, 0];
+    private static _currentBearing: number = 0;
+    private static _startLocation: number[] = [0, 0];
+    private static _endLocation: number[][] = [];
+
+    public static get isInit(): boolean {
+        return this._isInit;
+    }
+
+    public static get currentLocation(): number[] {
+        return this._currentLocation;
+    }
+
+    public static set currentLocation(value: number[]) {
+        this._currentLocation = value;
+    }
+
+    public static get currentBearing(): number {
+        return this._currentBearing;
+    }
+
+    public static set currentBearing(value: number) {
+        while (value > 360) {
+            value -= 360;
+        }
+
+        this._currentBearing = value;
+    }
+
+    public static get startLocation(): number[] {
+        return this._startLocation;
+    }
+
+    public static set startLocation(value: number[]) {
+        this._startLocation = value;
+    }
+
+    public static get endLocation(): number[][] {
+        return this._endLocation;
+    }
+
+    public static set endLocation(value: number[][]) {
+        this._endLocation = value;
+    }
 
     /**
      * Initialization Process of Service Layer
@@ -27,16 +73,10 @@ export class ServiceLayer {
     };
 
     public static adjustScaleValue = (stringData: string) => {
-        
         let keyframeValue = DataParser.stringToKeyFrame(stringData);
 
         throw new Error("Not Implemented");
     };
-
-    public static adjustCurrentLocation = () => {
-        ServiceLayer.scaleValue.currentLocation
-        throw new Error("Not Implemented");
-    }
 
     public static iterate = (
         stringData: string,

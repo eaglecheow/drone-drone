@@ -39,24 +39,62 @@ export class DataParser {
         return obstacleCategory;
     };
 
-    //TODO: Implement logic after getting TCP string format
-    public static stringToStartEndLocation = (
-        tcpString: string
-    ): {
-        start: number[];
-        end: number[];
-    } => {
-        throw new Error("Not Implemented");
-    };
+    // //TODO: Implement logic after getting TCP string format
+    // public static stringToStartEndLocation = (
+    //     tcpString: string
+    // ): {
+    //     start: number[];
+    //     end: number[];
+    // } => {
+    //     throw new Error("Not Implemented");
+    // };
 
-    //TODO: Implement logic after getting TCP string format
-    public static stringToCurrentLocAndBearing = (
+    // //TODO: Implement logic after getting TCP string format
+    // public static stringToCurrentLocAndBearing = (
+    //     tcpString: string
+    // ): {
+    //     currentLocation: number[];
+    //     bearing: number;
+    // } => {
+    //     throw new Error("Not Implemented");
+    // };
+
+    public static stringToDroneData = (
         tcpString: string
     ): {
-        currentLocation: number[];
-        bearing: number;
+        startLoc: number[];
+        endLoc: number[][];
+        currentLoc: number[];
+        currentBearing: number;
     } => {
-        throw new Error("Not Implemented");
+        let dataArray = tcpString.split("/");
+
+        let startLoc: number[] = [];
+        let endLoc: number[][] = [];
+        let currentLoc: number[] = [];
+        let currentBearing = parseFloat(dataArray[3]);
+
+        dataArray[0].split("@").forEach((coordinateItem, index) => {
+            startLoc[index] = parseFloat(coordinateItem);
+        });
+
+        dataArray[2].split("@").forEach((coordinateItem, index) => {
+            currentLoc[index] = parseFloat(coordinateItem);
+        });
+
+        dataArray[1].split(",").forEach((coordinateString, i) => {
+            if (!endLoc[i]) endLoc[i] = [];
+            coordinateString.split("@").forEach((coordinateItem, j) => {
+                endLoc[i][j] = parseFloat(coordinateItem);
+            });
+        });
+
+        return {
+            startLoc,
+            endLoc,
+            currentLoc,
+            currentBearing
+        };
     };
 
     public static stringToKeyFrame = (

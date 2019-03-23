@@ -1,6 +1,7 @@
 import * as net from "net";
 import { ServiceLayer } from "./index";
 import { TcpStringGenerator } from "./helper/TcpStringGenerator";
+import { DataParser } from "./helper/DataParser";
 
 const PORT = 8080;
 const DRONE_PORT = 8081;
@@ -23,11 +24,12 @@ const droneClient = net.createConnection(
 
 droneClient.on("data", data => {
     let dataString = data.toString();
-    if (dataString.startsWith("@@")) {
-        /** Start Location and End Location */
-    } else {
-        /** Current location, current bearing */
-    }
+    let droneData = DataParser.stringToDroneData(dataString);
+
+    ServiceLayer.startLocation = droneData.startLoc;
+    ServiceLayer.endLocation = droneData.endLoc;
+    ServiceLayer.currentLocation = droneData.currentLoc;
+    ServiceLayer.currentBearing = droneData.currentBearing;
 });
 
 droneClient.on("end", () => {
