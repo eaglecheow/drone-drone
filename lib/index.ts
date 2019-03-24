@@ -20,6 +20,7 @@ export class ServiceLayer {
     private static _currentBearing: number = 0;
     private static _startLocation: number[] = [0, 0];
     private static _endLocation: number[][] = [];
+    private static _gridScale: number = 0;
 
     public static get isInit(): boolean {
         return this._isInit;
@@ -59,6 +60,14 @@ export class ServiceLayer {
 
     public static set endLocation(value: number[][]) {
         this._endLocation = value;
+    }
+
+    public static get gridScale(): number {
+        return this._gridScale;
+    }
+
+    public static set gridScale(value: number) {
+        this._gridScale = value;
     }
 
     /**

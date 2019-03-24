@@ -1,4 +1,4 @@
-import { GridHelper } from "./GridHelper";
+import { GridHelper } from "../helper/GridHelper";
 import { RelativeObstacleGrid } from "./RelativeObstacleGrid";
 import geolib from "geolib";
 

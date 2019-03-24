@@ -1,6 +1,6 @@
 import { ObstacleCategory } from "./ObstacleCategory";
 import { RelativeObstacleGrid } from "./RelativeObstacleGrid";
-import { GridHelper } from "./GridHelper";
+import { GridHelper } from "../helper/GridHelper";
 import { GlobalObstacleGrid } from "./GlobalObstacleGrid";
 
 const mapGrid = (
