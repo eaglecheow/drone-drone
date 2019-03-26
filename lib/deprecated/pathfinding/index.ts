@@ -8,8 +8,8 @@ import PathFinding from "pathfinding";
  */
 export const findPath = (
     obstacleGrid: number[][],
-    startPoint: [number, number],
-    endPoint: [number, number]
+    startPoint: number[],
+    endPoint: number[]
 ): number[][] => {
     const yAxisLength = obstacleGrid.length;
     if (yAxisLength < 1) throw new Error("Invalid size: Y Axis");

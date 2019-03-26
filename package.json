@@ -7,7 +7,8 @@
     "build": "tsc",
     "dev": "ts-node ./lib/server.ts",
     "start": "nodemon ./dist/server.js",
-    "prod": "npm run build && npm run start"
+    "prod": "npm run build && npm run start",
+    "test": "ts-node ./lib/test/index.ts"
   },
   "author": "",
   "license": "ISC",

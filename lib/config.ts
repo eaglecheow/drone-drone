@@ -1,9 +1,9 @@
 export const devConfig: {
-    gridSize: [number, number];
-    rangeMin: [number, number];
-    rangeMax: [number, number];
-    currentLocation: [number, number];
-    endLocation: [number, number],
+    gridSize: number[];
+    rangeMin: number[];
+    rangeMax: number[];
+    currentLocation: number[];
+    endLocation: number[],
     referenceDistance: number;
     referenceBearing: number;
 } = {
@@ -11,7 +11,7 @@ export const devConfig: {
     rangeMin: [0, 0],
     rangeMax: [5, 2],
     currentLocation: [2.943999, 101.876484],
-    endLocation: [2.943999, 101.876484],
+    endLocation:[2.943999, 101.876484] ,
     referenceDistance: 1,
     referenceBearing: 0
 };

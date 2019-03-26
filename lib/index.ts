@@ -1,11 +1,13 @@
 import { DataParser } from "./helper/DataParser";
 import { Finder } from "./pathfinding/Finder";
 import { devConfig } from "./config";
+import { KeyframeHelper } from "./helper/KeyframeHelper";
+import { MapScale } from "./layergeneration/MapScale";
 
 interface ScaleValue {
-    gridSize: [number, number];
-    rangeMin: [number, number];
-    rangeMax: [number, number];
+    gridSize: number[];
+    rangeMin: number[];
+    rangeMax: number[];
     currentLocation: number[];
     referenceDistance: number;
     referenceBearing: number;
@@ -13,14 +15,23 @@ interface ScaleValue {
 
 export class ServiceLayer {
     //Default value, must be changed upon init
-    static scaleValue: ScaleValue = devConfig;
+    // static scaleValue: ScaleValue = devConfig;
 
     private static _isInit: boolean = false;
     private static _currentLocation: number[] = [0, 0];
     private static _currentBearing: number = 0;
     private static _startLocation: number[] = [0, 0];
     private static _endLocation: number[][] = [];
-    private static _gridScale: number = 0;
+    private static _gridScale: number[] = [1, 1, 1];
+    private static _keyframeHelper: KeyframeHelper;
+
+    private static initStatus = {
+        gridScale: false,
+        startPoint: false,
+        endPoint: false
+    };
+
+    private static mapScale: MapScale;
 
     public static get isInit(): boolean {
         return this._isInit;
@@ -52,6 +63,7 @@ export class ServiceLayer {
 
     public static set startLocation(value: number[]) {
         this._startLocation = value;
+        this.initStatus.startPoint = true;
     }
 
     public static get endLocation(): number[][] {
@@ -60,41 +72,66 @@ export class ServiceLayer {
 
     public static set endLocation(value: number[][]) {
         this._endLocation = value;
+        this.initStatus.endPoint = true;
     }
 
-    public static get gridScale(): number {
+    public static get gridScale(): number[] {
         return this._gridScale;
     }
 
-    public static set gridScale(value: number) {
-        this._gridScale = value;
+    public static get keyframeHelper(): KeyframeHelper {
+        return this._keyframeHelper;
     }
 
-    /**
-     * Initialization Process of Service Layer
-     * 1. Check for keyframe and perform calculation for scaling purpose
-     * 2. Adjust scale value
-     * 3.
-     */
+    public static set keyframeHelper(value: KeyframeHelper) {
+        this._keyframeHelper = value;
+
+        if (this._keyframeHelper.isInit) {
+            this._gridScale = this._keyframeHelper.gridScale;
+            this.initStatus.gridScale = true;
+        } else {
+            console.warn("KeyframeHelper not init");
+            this.initStatus.gridScale = false;
+        }
+    }
+
     public static init = () => {
-        //TODO: Write init implementation
-        throw new Error("Not Implemented");
-    };
+        let initCondition = true;
+        Object.values(ServiceLayer.initStatus).forEach(isInit => {
+            if (!isInit) initCondition = false;
+        });
 
-    public static adjustScaleValue = (stringData: string) => {
-        let keyframeValue = DataParser.stringToKeyFrame(stringData);
+        if (initCondition) {
+            ServiceLayer.mapScale = new MapScale(
+                [5, 30],
+                [0, 0],
+                [5, 2],
+                ServiceLayer.currentLocation,
+                ServiceLayer.startLocation,
+                ServiceLayer.endLocation[0],
+                ServiceLayer.gridScale,
+                ServiceLayer.currentBearing
+            )
 
-        throw new Error("Not Implemented");
+            ServiceLayer._isInit = true;
+        } else {
+            console.warn("Not enough data, unable to initialize");
+        }
     };
 
     public static iterate = (
         stringData: string,
         callback: (finder: Finder) => void
     ) => {
+        if (!ServiceLayer.isInit) {
+            console.warn("Service Layer not init");
+            return;
+        }
+
         if (stringData.length <= 0) return;
 
         let obstacleCategory = DataParser.stringToGrid(stringData, [3, 5]);
-        let finder = new Finder(obstacleCategory);
+        let finder = new Finder(obstacleCategory, ServiceLayer.mapScale);
 
         callback(finder);
     };

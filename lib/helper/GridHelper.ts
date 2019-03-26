@@ -1,6 +1,6 @@
 export class GridHelper {
     public static generateGrid = <T>(
-        gridSize: [number, number],
+        gridSize: number[],
         initItem: T
     ) => {
         let gridTemplate: T[][] = [];

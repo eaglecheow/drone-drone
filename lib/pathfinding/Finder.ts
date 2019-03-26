@@ -2,13 +2,14 @@ import { ObstacleCategory, mapGrid } from "../layergeneration";
 import { VerticalLevelFinder } from "./VerticalLevelFinder";
 import { devConfig } from "../config";
 import { LocalLevelFinder } from "./LocalLevelFinder";
+import { MapScale } from "../layergeneration/MapScale";
 
 export class Finder {
     private _targetPathLevel: number = 0;
     private _targetPathRelative: number[][] = [];
     private _targetPathGlobal: number[][] = [];
     private _obstacleCategory: ObstacleCategory;
-    private _targetPathDirections: number[] = [];
+    private _mapScale: MapScale;
 
     public get targetPathLevel(): number {
         return this._targetPathLevel;
@@ -31,14 +32,16 @@ export class Finder {
         this.calculatePathData();
     }
 
-    constructor(obstacleCategory: ObstacleCategory) {
+    constructor(obstacleCategory: ObstacleCategory, mapScale: MapScale) {
         this._obstacleCategory = obstacleCategory;
+        this._mapScale = mapScale;
         this.calculatePathData();
     }
 
     private calculatePathData() {
         let verticalLevelFinder = new VerticalLevelFinder(
-            this._obstacleCategory
+            this._obstacleCategory,
+            this._mapScale
         );
         let layerObstacle: number[] = [];
 
@@ -59,12 +62,12 @@ export class Finder {
 
         let layerGrid = mapGrid(
             layerObstacle,
-            devConfig.gridSize,
-            devConfig.rangeMin,
-            devConfig.rangeMax,
-            devConfig.currentLocation,
-            devConfig.referenceDistance,
-            devConfig.referenceBearing
+            this._mapScale.gridSize,
+            this._mapScale.rangeMin,
+            this._mapScale.rangeMax,
+            this._mapScale.currentLocation,
+            this._mapScale.referenceDistance,
+            this._mapScale.referenceBearing
         );
 
         let horizontalLevelFinder = new LocalLevelFinder(layerGrid);

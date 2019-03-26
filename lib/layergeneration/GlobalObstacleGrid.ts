@@ -5,8 +5,8 @@ import geolib from "geolib";
 export class GlobalObstacleGrid {
     private _relativeGrid: number[][];
     private _globalGrid: number[][][] = [];
-    private _currentLocation: [number, number];
-    private _referenceDistance: number;
+    private _currentLocation: number[];
+    private _referenceDistance: number[];
     private _referenceBearing: number;
 
     public get relativeGrid(): number[][] {
@@ -21,20 +21,20 @@ export class GlobalObstacleGrid {
         return this._globalGrid;
     }
 
-    public get currentLocation(): [number, number] {
+    public get currentLocation(): number[] {
         return this._currentLocation;
     }
 
-    public set currentLocation(value: [number, number]) {
+    public set currentLocation(value: number[]) {
         this._currentLocation = value;
         this.convertRelativeToGlobal();
     }
 
-    public get referenceDistance(): number {
+    public get referenceDistance(): number[] {
         return this._referenceDistance;
     }
 
-    public set referenceDistance(value: number) {
+    public set referenceDistance(value: number[]) {
         this._referenceDistance = value;
         this.convertRelativeToGlobal();
     }
@@ -50,8 +50,8 @@ export class GlobalObstacleGrid {
 
     constructor(
         obstacleGrid: RelativeObstacleGrid,
-        currentLocation: [number, number],
-        referenceDistance: number,
+        currentLocation: number[],
+        referenceDistance: number[],
         referenceBearing: number
     ) {
         this._relativeGrid = obstacleGrid.gridData;
@@ -119,7 +119,7 @@ export class GlobalObstacleGrid {
 
             let calculatedPoint = geolib.computeDestinationPoint(
                 initialPoint,
-                this._referenceDistance,
+                this._referenceDistance[0],
                 this.getBearing(this._referenceBearing, "west")
             );
 
@@ -142,7 +142,7 @@ export class GlobalObstacleGrid {
 
             let calculatedPoint = geolib.computeDestinationPoint(
                 initialPoint,
-                this._referenceDistance,
+                this._referenceDistance[0],
                 this.getBearing(this._referenceBearing, "east")
             );
 
@@ -162,7 +162,7 @@ export class GlobalObstacleGrid {
 
                 let calculatedPoint = geolib.computeDestinationPoint(
                     initialPoint,
-                    this._referenceDistance,
+                    this._referenceDistance[1],
                     this.getBearing(this._referenceBearing, "north")
                 );
 

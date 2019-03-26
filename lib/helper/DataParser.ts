@@ -1,9 +1,14 @@
 import { ObstacleCategory, GridHelper } from "../layergeneration";
 
 export class DataParser {
+    /**
+     * Parses a TCP string into Grid data
+     * @param tcpString TCP String to be parsed
+     * @param gridSize The expected grid size of the input data
+     */
     public static stringToGrid = (
         tcpString: string,
-        gridSize: [number, number]
+        gridSize: number[]
     ): ObstacleCategory => {
         const stringArray = tcpString.split(",");
         const numberArray = stringArray.map(stringValue =>

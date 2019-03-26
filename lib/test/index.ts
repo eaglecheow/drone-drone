@@ -1,38 +1,42 @@
 import { DataParser } from "../helper/DataParser";
 import { Finder } from "../pathfinding/Finder";
+import { ObstacleCategory } from "../layergeneration";
+import { ServiceLayer } from "../index";
+import { devConfig } from "../config";
+import { KeyframeHelper } from "../helper/KeyframeHelper";
+import { MapScale } from "../layergeneration/MapScale";
+import { TcpStringGenerator } from "../helper/TcpStringGenerator";
 
 const exampleString4 =
     "0,0.968517,0,0.770111,0.385994,0.896283,0.919713,0.936407,0.932002,0.926296,1.11689,1.30847,1.16218,1.19196,1.26318,";
 
-// const printObstacleGrid = (obstacleGrid: number[][][]): void => {
-//     for (let i = 0; i < obstacleGrid.length; i++) {
-//         for (let j = 0; j < obstacleGrid[0].length; j++) {
-//             process.stdout.write(`[${obstacleGrid[i][j].toString()}]`);
-//         }
-//         console.log();
-//     }
-// };
+const serviceLayerTest = () => {
+    ServiceLayer.currentBearing = 12;
+    ServiceLayer.currentLocation = devConfig.currentLocation;
+    ServiceLayer.endLocation = [devConfig.endLocation];
 
-export const codeTest = (stringData: string = exampleString4) => {
+    let keyFrameHelper = new KeyframeHelper();
+    keyFrameHelper.currentRealLocation = [2, 2, 2];
+    keyFrameHelper.currentRelativeLocation = [0.9, 0.9, 0.9];
 
+    keyFrameHelper.currentRealLocation = [3, 3, 3];
+    keyFrameHelper.currentRelativeLocation = [1.2, 1.2, 1.2];
 
-    let obstacleCategory = DataParser.stringToGrid(stringData, [3, 5]);
+    console.log("keyFrameHelper.gridScale", keyFrameHelper.gridScale);
+    console.log("keyFrameHelper.isInit", keyFrameHelper.isInit);
 
-    let finder = new Finder(obstacleCategory);
+    console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
 
-    console.log("finder.targetPathLevel: ", finder.targetPathLevel);
-    console.log("finder.targetPathGlobal: ", finder.targetPathGlobal);
-    console.log("finder.targetPathRelative: ", finder.targetPathRelative);
+    ServiceLayer.keyframeHelper = keyFrameHelper;
 
-    // let verticleFinder = new VerticleFinder(obstacleCategory);
+    ServiceLayer.startLocation = [2.943999, 101.876484];
+    ServiceLayer.endLocation = [[2.943999, 101.876484]];
 
-    // console.log(
-    //     "verticleFinder.resultPath.obstacleGrid.relativeGrid: ",
-    //     verticleFinder.resultPath.obstacleGrid.relativeGrid
-    // );
-    // console.log(
-    //     "verticleFinder.resultPath.globalPath: ",
-    //     verticleFinder.resultPath.globalPath
-    // );
-    // console.log("verticleFinder.resultLevel: ", verticleFinder.resultLevel);
+    console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
+
+    ServiceLayer.init();
+
+    console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
 };
+
+serviceLayerTest();

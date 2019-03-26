@@ -57,7 +57,7 @@ export class Converter {
         distance: number,
         referencePoint: number[],
         pointType: "start" | "end"
-    ): [number, number] => {
+    ): number[] => {
         const a = 1 / (1 + Math.pow(Math.tan(distance / (2 * this.radius)), 2));
         let calculatedLat = 0;
         if (pointType === "start") {
@@ -79,8 +79,8 @@ export class Converter {
      * @param to Coordinate of the destination point
      */
     public gpsToDistanceHaversine = (
-        from: [number, number],
-        to: [number, number]
+        from: number[],
+        to: number[]
     ): number => {
         const fromLat = from[0];
         const fromLng = from[1];

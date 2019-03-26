@@ -2,6 +2,9 @@ import * as net from "net";
 import { ServiceLayer } from "./index";
 import { TcpStringGenerator } from "./helper/TcpStringGenerator";
 import { DataParser } from "./helper/DataParser";
+import { KeyframeHelper } from "helper/KeyframeHelper";
+
+let keyFrameHelper = new KeyframeHelper();
 
 const PORT = 8080;
 const DRONE_PORT = 8081;
@@ -24,6 +27,20 @@ const droneClient = net.createConnection(
 
 droneClient.on("data", data => {
     let dataString = data.toString();
+
+    if (dataString.startsWith("Loc/Loc:")) {
+        dataString = dataString.substring(8);
+
+        let currentCoordinate: number[] = [];
+        dataString.split(",").forEach((coordinateItem, index) => {
+            currentCoordinate[index] = parseFloat(coordinateItem);
+        });
+
+        keyFrameHelper.currentRealLocation = currentCoordinate;
+
+        return;
+    }
+
     let droneData = DataParser.stringToDroneData(dataString);
 
     ServiceLayer.startLocation = droneData.startLoc;
@@ -42,7 +59,15 @@ server.on("connection", async sock => {
 
         if (dataString.startsWith("K:")) {
             /** Keyframe */
-            //TODO: Handle keyframe
+            let currentRelativeFrameObj = DataParser.stringToKeyFrame(
+                dataString
+            );
+            
+            keyFrameHelper.currentRelativeLocation = [
+                currentRelativeFrameObj.x,
+                currentRelativeFrameObj.y,
+                currentRelativeFrameObj.z
+            ];
         } else {
             /** Iteration */
             ServiceLayer.iterate(dataString, finder => {
