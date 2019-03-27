@@ -44,26 +44,6 @@ export class DataParser {
         return obstacleCategory;
     };
 
-    // //TODO: Implement logic after getting TCP string format
-    // public static stringToStartEndLocation = (
-    //     tcpString: string
-    // ): {
-    //     start: number[];
-    //     end: number[];
-    // } => {
-    //     throw new Error("Not Implemented");
-    // };
-
-    // //TODO: Implement logic after getting TCP string format
-    // public static stringToCurrentLocAndBearing = (
-    //     tcpString: string
-    // ): {
-    //     currentLocation: number[];
-    //     bearing: number;
-    // } => {
-    //     throw new Error("Not Implemented");
-    // };
-
     public static stringToDroneData = (
         tcpString: string
     ): {

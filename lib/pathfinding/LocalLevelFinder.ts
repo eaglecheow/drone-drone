@@ -42,7 +42,6 @@ export class LocalLevelFinder {
         this.matchRelativePathToGlobal();
     }
 
-    //TODO: Set endpoint relative to target point
     private findEndPoint(): number[] {
         let relativeGrid = this._localLevelGrid.relativeGrid;
         let globalGrid = this._localLevelGrid.globalGrid;
