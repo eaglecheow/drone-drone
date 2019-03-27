@@ -13,7 +13,7 @@ const exampleString4 =
 const serviceLayerTest = () => {
     ServiceLayer.currentBearing = 12;
     ServiceLayer.currentLocation = devConfig.currentLocation;
-    ServiceLayer.endLocation = [devConfig.endLocation];
+    // ServiceLayer.endLocation = [devConfig.endLocation];
 
     let keyFrameHelper = new KeyframeHelper();
     keyFrameHelper.currentRealLocation = [2, 2, 2];
@@ -30,13 +30,18 @@ const serviceLayerTest = () => {
     ServiceLayer.keyframeHelper = keyFrameHelper;
 
     ServiceLayer.startLocation = [2.943999, 101.876484];
-    ServiceLayer.endLocation = [[2.943999, 101.876484]];
+    ServiceLayer.endLocation = [[2.943999, 102.876484]];
 
     console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
 
     ServiceLayer.init();
 
     console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
+
+    ServiceLayer.iterate(exampleString4, finder => {
+        let tcpString = TcpStringGenerator.finderToTCP(finder);
+        console.log("tcpString: ", tcpString);
+    });
 };
 
 serviceLayerTest();

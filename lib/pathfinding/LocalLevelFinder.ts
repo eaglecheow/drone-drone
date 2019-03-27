@@ -5,6 +5,7 @@ import geolib from "geolib";
 
 export class LocalLevelFinder {
     private _localLevelGrid: GlobalObstacleGrid;
+    private _endLocation: number[];
     private _relativePath: number[][] = [];
     private _globalPath: number[][] = [];
 
@@ -26,8 +27,17 @@ export class LocalLevelFinder {
         return this._globalPath;
     }
 
-    constructor(localLevelGrid: GlobalObstacleGrid) {
+    public get endLocation(): number[] {
+        return this._endLocation;
+    }
+
+    public set endLocation(value: number[]) {
+        this._endLocation = value;
+    }
+
+    constructor(localLevelGrid: GlobalObstacleGrid, endLocation: number[]) {
         this._localLevelGrid = localLevelGrid;
+        this._endLocation = endLocation;
         this.findRelativePath();
         this.matchRelativePathToGlobal();
     }
@@ -55,8 +65,8 @@ export class LocalLevelFinder {
                 longitude: globalGrid[emptySpaceIndex[1]][emptySpaceIndex[0]][1]
             };
             let endCoordinate = {
-                latitude: devConfig.endLocation[0],
-                longitude: devConfig.endLocation[1]
+                latitude: this._endLocation[0],
+                longitude: this._endLocation[1]
             };
 
             let distance = geolib.getDistance(localCoordinate, endCoordinate);
@@ -81,20 +91,21 @@ export class LocalLevelFinder {
      */
     private findRelativePath(): void {
         let relativeGrid = this._localLevelGrid.relativeGrid;
-        let targetPoint = [0, 0];
+        let targetPoint = this.findEndPoint();
 
-        //Find furthest possible point
-        for (let i = 0; i < relativeGrid.length; i++) {
-            for (let j = 0; j < relativeGrid[i].length; j++) {
-                if (relativeGrid[i][j] === 0) {
-                    targetPoint = [j, i];
-                }
-            }
-        }
+        // //Find furthest possible point
+        // for (let i = 0; i < relativeGrid.length; i++) {
+        //     for (let j = 0; j < relativeGrid[i].length; j++) {
+        //         if (relativeGrid[i][j] === 0) {
+        //             targetPoint = [j, i];
+        //         }
+        //     }
+        // }
 
         //Set path points
         const startPointX = Math.floor(relativeGrid[0].length / 2);
         const startPointZ = 0;
+
         const endPointX = targetPoint[0];
         const endPointZ = targetPoint[1];
 
@@ -110,6 +121,8 @@ export class LocalLevelFinder {
         );
 
         this._relativePath = path;
+
+        console.log("this._relativePath: ", this._relativePath);
     }
 
     /**

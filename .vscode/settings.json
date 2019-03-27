@@ -4,6 +4,9 @@
         "**/.vscode/**",
         "**/node_modules/**",
         "**/dist/**",
-        "**/lib/deprecated/**"
+        "**/lib/deprecated/**",
+        "**/package-lock.json",
+        "**/package.json",
+        "**/tsconfig.json"
     ]
 }

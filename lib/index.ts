@@ -28,7 +28,9 @@ export class ServiceLayer {
     private static initStatus = {
         gridScale: false,
         startPoint: false,
-        endPoint: false
+        endPoint: false,
+        currentLocation: false,
+        currentBearing: false
     };
 
     private static mapScale: MapScale;
@@ -43,6 +45,7 @@ export class ServiceLayer {
 
     public static set currentLocation(value: number[]) {
         this._currentLocation = value;
+        this.initStatus.currentLocation = true;
     }
 
     public static get currentBearing(): number {
@@ -55,6 +58,7 @@ export class ServiceLayer {
         }
 
         this._currentBearing = value;
+        this.initStatus.currentBearing = true;
     }
 
     public static get startLocation(): number[] {
@@ -98,6 +102,7 @@ export class ServiceLayer {
     public static init = () => {
         let initCondition = true;
         Object.values(ServiceLayer.initStatus).forEach(isInit => {
+            console.log("isInit: ", isInit);
             if (!isInit) initCondition = false;
         });
 
@@ -131,7 +136,7 @@ export class ServiceLayer {
         if (stringData.length <= 0) return;
 
         let obstacleCategory = DataParser.stringToGrid(stringData, [3, 5]);
-        let finder = new Finder(obstacleCategory, ServiceLayer.mapScale);
+        let finder = new Finder(obstacleCategory, ServiceLayer.mapScale, ServiceLayer.endLocation[0]);
 
         callback(finder);
     };

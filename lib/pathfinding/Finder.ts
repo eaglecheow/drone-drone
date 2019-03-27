@@ -1,6 +1,5 @@
 import { ObstacleCategory, mapGrid } from "../layergeneration";
 import { VerticalLevelFinder } from "./VerticalLevelFinder";
-import { devConfig } from "../config";
 import { LocalLevelFinder } from "./LocalLevelFinder";
 import { MapScale } from "../layergeneration/MapScale";
 
@@ -10,6 +9,7 @@ export class Finder {
     private _targetPathGlobal: number[][] = [];
     private _obstacleCategory: ObstacleCategory;
     private _mapScale: MapScale;
+    private _endCoordinate: number[];
 
     public get targetPathLevel(): number {
         return this._targetPathLevel;
@@ -32,9 +32,26 @@ export class Finder {
         this.calculatePathData();
     }
 
-    constructor(obstacleCategory: ObstacleCategory, mapScale: MapScale) {
+    public get endCoordinate(): number[] {
+        return this._endCoordinate;
+    }
+
+    public set endCoordinate(value: number[]) {
+        if (value.length !== 2) {
+            console.warn("End coordinate dimension invalid");
+            return;
+        }
+        this._endCoordinate = value;
+    }
+
+    constructor(
+        obstacleCategory: ObstacleCategory,
+        mapScale: MapScale,
+        endLocation: number[]
+    ) {
         this._obstacleCategory = obstacleCategory;
         this._mapScale = mapScale;
+        this._endCoordinate = endLocation;
         this.calculatePathData();
     }
 
@@ -70,7 +87,7 @@ export class Finder {
             this._mapScale.referenceBearing
         );
 
-        let horizontalLevelFinder = new LocalLevelFinder(layerGrid);
+        let horizontalLevelFinder = new LocalLevelFinder(layerGrid, this._endCoordinate);
 
         this._targetPathLevel = verticalLevelFinder.flightLevel;
         this._targetPathRelative = horizontalLevelFinder.relativePath;

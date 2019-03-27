@@ -30,7 +30,9 @@ export class TcpStringGenerator {
 
             const distance = geolib.getDistance(
                 currentCoordinate,
-                nextCoordinate
+                nextCoordinate,
+                1,
+                3
             );
 
             const bearing = geolib.getBearing(
@@ -59,6 +61,6 @@ export class TcpStringGenerator {
     }
 
     public static controlLayerLocationPingTcp(): string {
-        return "Loc/Loc"
+        return "Loc/Loc";
     }
 }
