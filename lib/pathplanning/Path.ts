@@ -36,7 +36,12 @@ export class Path {
         this._endPoint = endPoint;
     }
 
-    public checkPointInPath = (point: number[]): boolean => {
+    public checkPointInPath = (
+        point: number[]
+    ): {
+        isInBound: boolean;
+        pointLocation: "start" | "path" | "end" | "outside";
+    } => {
         let pathPolygon = PathHelper.generatePathBound(
             this._startPoint,
             this._endPoint,
@@ -81,6 +86,21 @@ export class Path {
             if (isInShapeBound) isInBound = true;
         });
 
-        return isInBound;
+        let positionString: "start" | "path" | "end" | "outside";
+
+        if (isInShapeBoundCheck[0]) {
+            positionString = "start";
+        } else if (isInShapeBoundCheck[1]) {
+            positionString = "end";
+        } else if (isInShapeBoundCheck[2]) {
+            positionString = "path";
+        } else {
+            positionString = "outside";
+        }
+
+        return {
+            isInBound,
+            pointLocation: positionString
+        };
     };
 }

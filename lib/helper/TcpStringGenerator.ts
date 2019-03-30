@@ -55,7 +55,7 @@ export class TcpStringGenerator {
         distanceString = distanceString + "|";
         bearingString = bearingString + "|";
 
-        return `${distanceString}@${bearingString}@${coordinateString}`;
+        return `PATH://${finder.targetPathLevel}@${distanceString}@${bearingString}@${coordinateString}`;
 
         //|dist1|dist2|@|bearing1|bearing2|@|lat1,lng1|lat2,lng2|lat3,lng3|
     }

@@ -44,6 +44,10 @@ export class DataParser {
         return obstacleCategory;
     };
 
+    /**
+     * Converts tcp string data from drone server to server reaadable format
+     * @param tcpString TCP String to convert
+     */
     public static stringToDroneData = (
         tcpString: string
     ): {
@@ -82,6 +86,10 @@ export class DataParser {
         };
     };
 
+    /**
+     * Converts keyframe TCP from perception layer to relative x, y, z
+     * @param tcpString TCP string to convert
+     */
     public static stringToKeyFrame = (
         tcpString: string
     ): {
@@ -103,52 +111,4 @@ export class DataParser {
 
         return result;
     };
-
-    /** DEPRECATED */
-    // /**
-    //  * Parses TCP string to obstacle data readable for the script
-    //  * @param tcpString Input TCP string
-    //  */
-    // static stringToObstacle = (tcpString: string): ObstacleCategory => {
-    //     let obstacleCategory = new ObstacleCategory();
-
-    //     const layerStringArray = tcpString.split("+");
-    //     layerStringArray.forEach(layerString => {
-    //         const obstacleCollectionString = layerString.slice(
-    //             2,
-    //             layerString.length - 1
-    //         );
-    //         const obstacleStringArray = obstacleCollectionString.split(":");
-    //         const obstacleArray = obstacleStringArray.map(stringValue => {
-    //             const filteredStringValue = stringValue.slice(
-    //                 0,
-    //                 stringValue.length - 1
-    //             );
-    //             const dataArray = filteredStringValue.split(",");
-
-    //             // const xAxis = parseFloat(dataArray[0]);
-    //             // const yAxis = parseFloat(dataArray[1]);
-    //             // const zAxis = parseFloat(dataArray[2]);
-    //             const xzDistance = parseFloat(dataArray[0]);
-    //             const angle = parseFloat(dataArray[1]);
-
-    //             return [xzDistance, angle];
-    //         });
-
-    //         const layerCharacter = layerString[0];
-    //         if (layerCharacter === "H") {
-    //             obstacleCategory.level1 = obstacleArray;
-    //         } else if (layerCharacter === "M") {
-    //             obstacleCategory.level2 = obstacleArray;
-    //         } else if (layerCharacter === "L") {
-    //             obstacleCategory.level3 = obstacleArray;
-    //         } else {
-    //             console.warn(
-    //                 `Invalid layer character detected, please check TCP string [layerCharacter = ${layerCharacter}]`
-    //             );
-    //         }
-    //     });
-
-    //     return obstacleCategory;
-    // };
 }
