@@ -61,6 +61,10 @@ export class TcpStringGenerator {
     }
 
     public static controlLayerLocationPingTcp(): string {
-        return "Loc/Loc";
+        return "LOC://";
+    }
+
+    public static perceptionLayerInitCompleteTcp(): string {
+        return "INIT://PERC@COMPLETE";
     }
 }

@@ -24,6 +24,8 @@ export class ServiceLayer {
     private static _endLocation: number[][] = [];
     private static _gridScale: number[] = [1, 1, 1];
     private static _keyframeHelper: KeyframeHelper;
+    private static _isControlInit: boolean = false;
+    private static _isPerceptionInit: boolean = false;
 
     private static initStatus = {
         gridScale: false,
@@ -87,6 +89,22 @@ export class ServiceLayer {
         return this._keyframeHelper;
     }
 
+    public static get isControlInit(): boolean {
+        return this._isControlInit;
+    }
+
+    public static set isControlInit(value: boolean) {
+        this._isControlInit = value;
+    }
+
+    public static get isPerceptionInit(): boolean {
+        return this._isPerceptionInit;
+    }
+
+    public static set isPerceptionInit(value: boolean) {
+        this._isPerceptionInit = value;
+    }
+
     public static set keyframeHelper(value: KeyframeHelper) {
         this._keyframeHelper = value;
 
@@ -116,7 +134,7 @@ export class ServiceLayer {
                 ServiceLayer.endLocation[0],
                 ServiceLayer.gridScale,
                 ServiceLayer.currentBearing
-            )
+            );
 
             ServiceLayer._isInit = true;
         } else {
@@ -136,7 +154,11 @@ export class ServiceLayer {
         if (stringData.length <= 0) return;
 
         let obstacleCategory = DataParser.stringToGrid(stringData, [3, 5]);
-        let finder = new Finder(obstacleCategory, ServiceLayer.mapScale, ServiceLayer.endLocation[0]);
+        let finder = new Finder(
+            obstacleCategory,
+            ServiceLayer.mapScale,
+            ServiceLayer.endLocation[0]
+        );
 
         callback(finder);
     };
