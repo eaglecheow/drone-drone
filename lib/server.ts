@@ -14,6 +14,9 @@ const PORT = 8080;
 const DRONE_PORT = 8081;
 const HOST = "127.0.0.1";
 
+const droneClientInitDelay = 5000;
+let isKeyframeInitSent = false;
+
 const server = net.createServer();
 let droneClient: net.Socket;
 
@@ -29,9 +32,15 @@ server.on("connection", async sock => {
             //Toggle Perception Layer initialized if previously false
             //Notifies Control layer that perception layer init complete
             if (!ServiceLayer.isPerceptionInit) {
+                console.log(
+                    "Perception Layer sent first keyframe, Perception Layer init complete..."
+                );
                 ServiceLayer.isPerceptionInit = true;
+                console.log(
+                    "Notifying Control Layer that Perception Layer init complete..."
+                );
                 droneClient.write(
-                    TcpStringGenerator.perceptionLayerInitCompleteTcp
+                    TcpStringGenerator.perceptionLayerInitCompleteTcp()
                 );
                 return;
             }
@@ -47,44 +56,65 @@ server.on("connection", async sock => {
                 currentRelativeFrameObj.z
             ];
 
-            droneClient.write(TcpStringGenerator.controlLayerLocationPingTcp);
+            console.log("keyFrameHelper.isInit: ", keyFrameHelper.isInit);
+
+            console.log("Pinging Control Layer for real location...");
+            droneClient.write(TcpStringGenerator.controlLayerLocationPingTcp());
         } else if (dataString.startsWith("droneserver")) {
-            droneClient = net.createConnection(
-                { host: HOST, port: DRONE_PORT },
-                () => {
-                    console.log(
-                        `TCP connection established with drone server at ${HOST}:${DRONE_PORT}`
-                    );
-                }
+            console.log("Control Layer requested for client connection...");
+            console.log(
+                `Waiting for ${droneClientInitDelay}ms before staring drone client...`
             );
+            ServiceLayer.isControlInit = true;
+            setTimeout(() => {
+                console.log("Starting drone client...");
+                droneClient = net.createConnection(
+                    { host: HOST, port: DRONE_PORT },
+                    () => {
+                        console.log(
+                            `TCP connection established with Control Layer Server at ${HOST}:${DRONE_PORT}`
+                        );
+                    }
+                );
 
-            droneClient.on("data", data => {
-                let dataString = data.toString();
+                droneClient.on("data", data => {
+                    let dataString = data.toString();
 
-                if (dataString.startsWith("Loc/Loc:")) {
-                    dataString = dataString.substring(8);
+                    if (dataString.startsWith("Loc/Loc:")) {
+                        dataString = dataString.substring(8);
 
-                    let currentCoordinate: number[] = [];
-                    dataString.split(",").forEach((coordinateItem, index) => {
-                        currentCoordinate[index] = parseFloat(coordinateItem);
-                    });
+                        let currentCoordinate: number[] = [];
+                        dataString
+                            .split(",")
+                            .forEach((coordinateItem, index) => {
+                                currentCoordinate[index] = parseFloat(
+                                    coordinateItem
+                                );
+                            });
 
-                    keyFrameHelper.currentRealLocation = currentCoordinate;
+                        keyFrameHelper.currentRealLocation = currentCoordinate;
+                        console.log("keyFrameHelper.gridScale: ", keyFrameHelper.gridScale);
 
-                    return;
-                }
+                        if (!isKeyframeInitSent && keyFrameHelper.isInit) {
+                            droneClient.write("INIT://SERV@KEYFRAME");
+                            isKeyframeInitSent = true;
+                        }
 
-                let droneData = DataParser.stringToDroneData(dataString);
+                        return;
+                    }
 
-                ServiceLayer.startLocation = droneData.startLoc;
-                ServiceLayer.endLocation = droneData.endLoc;
-                ServiceLayer.currentLocation = droneData.currentLoc;
-                ServiceLayer.currentBearing = droneData.currentBearing;
-            });
+                    let droneData = DataParser.stringToDroneData(dataString);
 
-            droneClient.on("end", () => {
-                console.log("Disconnected from drone server");
-            });
+                    ServiceLayer.startLocation = droneData.startLoc;
+                    ServiceLayer.endLocation = droneData.endLoc;
+                    ServiceLayer.currentLocation = droneData.currentLoc;
+                    ServiceLayer.currentBearing = droneData.currentBearing;
+                });
+
+                droneClient.on("end", () => {
+                    console.log("Disconnected from drone server");
+                });
+            }, droneClientInitDelay);
         } else {
             /** Iteration */
             ServiceLayer.iterate(dataString, finder => {

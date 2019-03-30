@@ -1,5 +1,6 @@
 export class KeyframeHelper {
     private _isInit: boolean = false;
+    private _acceptRealLoc: boolean = false;
     private _previousRelativeLocation: number[] = [];
     private _currentRelativeLocation: number[] = [];
     private _previousRealLocation: number[] = [];
@@ -28,6 +29,10 @@ export class KeyframeHelper {
         return this._isInit;
     }
 
+    public get acceptRealLoc(): boolean {
+        return this._acceptRealLoc;
+    }
+
     public get previousRelativeLocation(): number[] {
         return this._previousRelativeLocation;
     }
@@ -37,8 +42,22 @@ export class KeyframeHelper {
     }
 
     public set currentRelativeLocation(value: number[]) {
-        if (value.length !== 3)
-            throw new Error("Invalid location format, should be [x, y, z]");
+
+        if (value.length !== 3) {
+            console.log("Invalid location format, should be [x, y, z]");
+            return;
+        }
+
+        if (this._acceptRealLoc) return;
+
+        let isArrayEqual = true;
+
+        for (let i = 0; i < value.length; i++) {
+            if (value[i] !== this._currentRelativeLocation[i])
+                isArrayEqual = false;
+        }
+
+        if (isArrayEqual) return;
 
         if (this._currentRelativeLocation.length === 3) {
             this._previousRelativeLocation = this._currentRelativeLocation;
@@ -47,6 +66,7 @@ export class KeyframeHelper {
 
         this.initStatus.currentRelLoc = true;
         this._currentRelativeLocation = value;
+        this._acceptRealLoc = true;
     }
 
     public get previousRealLocation(): number[] {
@@ -58,8 +78,21 @@ export class KeyframeHelper {
     }
 
     public set currentRealLocation(value: number[]) {
-        if (value.length !== 3)
-            throw new Error("Invalid location format, should be [x, y, z]");
+
+        if (value.length !== 3) {
+            console.log("Invalid location format, should be [x, y, z]");
+            return;
+        }
+
+        if (!this._acceptRealLoc) return;
+
+        let isArrayEqual = true;
+
+        for (let i = 0; i < value.length; i++) {
+            if (value[i] !== this._currentRealLocation[i]) isArrayEqual = false;
+        }
+
+        if (isArrayEqual) return;
 
         if (this._currentRealLocation.length === 3) {
             this._previousRealLocation = this._currentRealLocation;
@@ -68,6 +101,7 @@ export class KeyframeHelper {
 
         this.initStatus.currentRealLoc = true;
         this._currentRealLocation = value;
+        this._acceptRealLoc = false;
     }
 
     public get gridScale(): number[] {
@@ -91,6 +125,21 @@ export class KeyframeHelper {
                 this._currentRealLocation[1] - this._previousRealLocation[1],
                 this._currentRealLocation[2] - this._previousRealLocation[2]
             ];
+
+            console.log(
+                "this._currentRelativeLocation: ",
+                this._currentRelativeLocation
+            );
+            console.log(
+                "this._previousRelativeLocation: ",
+                this._previousRelativeLocation
+            );
+
+            console.log("this._currentRealLocation: ", this._currentRealLocation);
+            console.log("this._previousRealLocation: ", this._previousRealLocation);
+
+            console.log("diffRel: ", diffRel);
+            console.log("diffReal: ", diffReal);
 
             let scale = [
                 diffReal[0] / diffRel[0],
