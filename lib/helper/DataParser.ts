@@ -6,10 +6,10 @@ export class DataParser {
      * @param tcpString TCP String to be parsed
      * @param gridSize The expected grid size of the input data
      */
-    public static stringToGrid = (
+    public static stringToGrid(
         tcpString: string,
         gridSize: number[]
-    ): ObstacleCategory => {
+    ): ObstacleCategory {
         const stringArray = tcpString.split(",");
         const numberArray = stringArray.map(stringValue =>
             parseFloat(stringValue)
@@ -42,61 +42,61 @@ export class DataParser {
         // console.log("Obstacle Category: ", obstacleCategory);
 
         return obstacleCategory;
-    };
+    }
 
-    /**
-     * Converts tcp string data from drone server to server reaadable format
-     * @param tcpString TCP String to convert
-     */
-    public static stringToDroneData = (
-        tcpString: string
-    ): {
-        startLoc: number[];
-        endLoc: number[][];
-        currentLoc: number[];
-        currentBearing: number;
-    } => {
-        let dataArray = tcpString.split("/");
+    // /**
+    //  * Converts tcp string data from drone server to server reaadable format
+    //  * @param tcpString TCP String to convert
+    //  */
+    // public static stringToDroneData(
+    //     tcpString: string
+    // ): {
+    //     startLoc: number[];
+    //     endLoc: number[][];
+    //     currentLoc: number[];
+    //     currentBearing: number;
+    // } {
+    //     let dataArray = tcpString.split("/");
 
-        let startLoc: number[] = [];
-        let endLoc: number[][] = [];
-        let currentLoc: number[] = [];
-        let currentBearing = parseFloat(dataArray[3]);
+    //     let startLoc: number[] = [];
+    //     let endLoc: number[][] = [];
+    //     let currentLoc: number[] = [];
+    //     let currentBearing = parseFloat(dataArray[3]);
 
-        dataArray[0].split("@").forEach((coordinateItem, index) => {
-            startLoc[index] = parseFloat(coordinateItem);
-        });
+    //     dataArray[0].split("@").forEach((coordinateItem, index) => {
+    //         startLoc[index] = parseFloat(coordinateItem);
+    //     });
 
-        dataArray[2].split("@").forEach((coordinateItem, index) => {
-            currentLoc[index] = parseFloat(coordinateItem);
-        });
+    //     dataArray[2].split("@").forEach((coordinateItem, index) => {
+    //         currentLoc[index] = parseFloat(coordinateItem);
+    //     });
 
-        dataArray[1].split(",").forEach((coordinateString, i) => {
-            if (!endLoc[i]) endLoc[i] = [];
-            coordinateString.split("@").forEach((coordinateItem, j) => {
-                endLoc[i][j] = parseFloat(coordinateItem);
-            });
-        });
+    //     dataArray[1].split(",").forEach((coordinateString, i) => {
+    //         if (!endLoc[i]) endLoc[i] = [];
+    //         coordinateString.split("@").forEach((coordinateItem, j) => {
+    //             endLoc[i][j] = parseFloat(coordinateItem);
+    //         });
+    //     });
 
-        return {
-            startLoc,
-            endLoc,
-            currentLoc,
-            currentBearing
-        };
-    };
+    //     return {
+    //         startLoc,
+    //         endLoc,
+    //         currentLoc,
+    //         currentBearing
+    //     };
+    // }
 
     /**
      * Converts keyframe TCP from perception layer to relative x, y, z
      * @param tcpString TCP string to convert
      */
-    public static stringToKeyFrame = (
+    public static stringToKeyFrame(
         tcpString: string
     ): {
         x: number;
         y: number;
         z: number;
-    } => {
+    } {
         let inputString = tcpString.replace("K:", "");
         let stringArray = inputString.split(",");
 
@@ -110,5 +110,70 @@ export class DataParser {
         };
 
         return result;
-    };
+    }
+
+    public static stringToDroneKeyframe(
+        keyframeString: string
+    ): {
+        x: number;
+        y: number;
+        z: number;
+    } {
+        let dataString = keyframeString.substring(11);
+        let dataArray = dataString.split(",");
+
+        let gpsData = dataArray[0]
+            .split("@")
+            .map(dataItem => parseFloat(dataItem));
+        let nedData = dataArray[1]
+            .split("@")
+            .map(dataItem => parseFloat(dataItem));
+        let heading = parseFloat(dataArray[2]);
+
+        return {
+            x: nedData[1],
+            y: nedData[0],
+            z: nedData[2]
+        };
+    }
+
+    public static stringToWaypoint(
+        waypointString: string
+    ): {
+        startPoint: number[];
+        endPoints: number[][];
+    } {
+        let dataString = waypointString.substring(5);
+        let wayPoints = dataString.split(",").map(coordinateString => {
+            let coordinateItems = coordinateString.split("@");
+            return [
+                parseFloat(coordinateItems[0]),
+                parseFloat(coordinateItems[1])
+            ];
+        });
+
+        return {
+            startPoint: wayPoints[0],
+            endPoints: wayPoints.splice(1, wayPoints.length - 1)
+        };
+    }
+
+    public static stringToCurrentLocation(
+        currentLocationString: string
+    ): {
+        coordinate: number[];
+        altitude: number;
+        heading: number;
+    } {
+        let data = currentLocationString
+            .substring(6)
+            .split("@")
+            .map(dataItem => parseFloat(dataItem));
+
+        return {
+            coordinate: [data[0], data[1]],
+            altitude: data[2],
+            heading: data[3]
+        };
+    }
 }

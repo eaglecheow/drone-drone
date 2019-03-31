@@ -80,35 +80,89 @@ server.on("connection", async sock => {
                 droneClient.on("data", data => {
                     let dataString = data.toString();
 
-                    if (dataString.startsWith("Loc/Loc:")) {
-                        dataString = dataString.substring(8);
+                    //Keyframe
+                    if (dataString.startsWith("KEYFRAME://")) {
+                        let realLocation = DataParser.stringToDroneKeyframe(
+                            dataString
+                        );
 
-                        let currentCoordinate: number[] = [];
-                        dataString
-                            .split(",")
-                            .forEach((coordinateItem, index) => {
-                                currentCoordinate[index] = parseFloat(
-                                    coordinateItem
-                                );
-                            });
+                        keyFrameHelper.currentRealLocation = [
+                            realLocation.x,
+                            realLocation.y,
+                            realLocation.z
+                        ];
+                        console.log(
+                            "keyFrameHelper.gridScale: ",
+                            keyFrameHelper.gridScale
+                        );
 
-                        keyFrameHelper.currentRealLocation = currentCoordinate;
-                        console.log("keyFrameHelper.gridScale: ", keyFrameHelper.gridScale);
+                        ServiceLayer.keyframeHelper = keyFrameHelper;
 
                         if (!isKeyframeInitSent && keyFrameHelper.isInit) {
+                            console.log(
+                                "Notifying other layers Service Layer keyframe init complete"
+                            );
                             droneClient.write("INIT://SERV@KEYFRAME");
+                            sock.write("INIT://SERV@KEYFRAME");
                             isKeyframeInitSent = true;
                         }
 
                         return;
                     }
 
-                    let droneData = DataParser.stringToDroneData(dataString);
+                    //Waypoint
+                    if (dataString.startsWith("WP://")) {
+                        let wayPointItem = DataParser.stringToWaypoint(
+                            dataString
+                        );
 
-                    ServiceLayer.startLocation = droneData.startLoc;
-                    ServiceLayer.endLocation = droneData.endLoc;
-                    ServiceLayer.currentLocation = droneData.currentLoc;
-                    ServiceLayer.currentBearing = droneData.currentBearing;
+                        ServiceLayer.startLocation = wayPointItem.startPoint;
+                        ServiceLayer.endLocation = wayPointItem.endPoints;
+
+                        console.log(
+                            "ServiceLayer.isInit: ",
+                            ServiceLayer.isInit
+                        );
+                        console.log(
+                            "ServiceLayer.startLocation: ",
+                            ServiceLayer.startLocation
+                        );
+                        console.log(
+                            "ServiceLayer.endLocation: ",
+                            ServiceLayer.endLocation
+                        );
+
+                        return;
+                    }
+
+                    //Current Location
+                    if (dataString.startsWith("LOC://")) {
+                        let currentLocItem = DataParser.stringToCurrentLocation(
+                            dataString
+                        );
+                        console.log("currentLocItem: ", currentLocItem);
+                        ServiceLayer.currentLocation =
+                            currentLocItem.coordinate;
+                        ServiceLayer.currentBearing = currentLocItem.heading;
+                        if (!ServiceLayer.isInit) {
+                            console.log(
+                                "Attempting to initialize Service Layer..."
+                            );
+                            ServiceLayer.init();
+                        }
+                        console.log(
+                            "ServiceLayer.isInit: ",
+                            ServiceLayer.isInit
+                        );
+                        return;
+                    }
+
+                    // let droneData = DataParser.stringToDroneData(dataString);
+
+                    // ServiceLayer.startLocation = droneData.startLoc;
+                    // ServiceLayer.endLocation = droneData.endLoc;
+                    // ServiceLayer.currentLocation = droneData.currentLoc;
+                    // ServiceLayer.currentBearing = droneData.currentBearing;
                 });
 
                 droneClient.on("end", () => {
