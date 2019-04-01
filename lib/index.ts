@@ -26,6 +26,7 @@ export class ServiceLayer {
     private static _keyframeHelper: KeyframeHelper;
     private static _isControlInit: boolean = false;
     private static _isPerceptionInit: boolean = false;
+    private static _finder: Finder;
 
     private static initStatus = {
         gridScale: false,
@@ -117,6 +118,10 @@ export class ServiceLayer {
         }
     }
 
+    public static get finder(): Finder {
+        return this._finder;
+    }
+
     public static init = () => {
         let initCondition = true;
         Object.values(ServiceLayer.initStatus).forEach(isInit => {
@@ -142,10 +147,10 @@ export class ServiceLayer {
         }
     };
 
-    public static iterate = (
+    public static iterate(
         stringData: string,
-        callback: (finder: Finder) => void
-    ) => {
+        callback: (finder: Finder) => void = () => {}
+    ) {
         if (!ServiceLayer.isInit) {
             console.warn("Service Layer not init");
             return;
@@ -160,6 +165,8 @@ export class ServiceLayer {
             ServiceLayer.endLocation[0]
         );
 
+        ServiceLayer._finder = finder;
+
         callback(finder);
-    };
+    }
 }

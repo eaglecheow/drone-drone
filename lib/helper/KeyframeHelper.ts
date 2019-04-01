@@ -42,7 +42,6 @@ export class KeyframeHelper {
     }
 
     public set currentRelativeLocation(value: number[]) {
-
         if (value.length !== 3) {
             console.log("Invalid location format, should be [x, y, z]");
             return;
@@ -78,7 +77,6 @@ export class KeyframeHelper {
     }
 
     public set currentRealLocation(value: number[]) {
-
         if (value.length !== 3) {
             console.log("Invalid location format, should be [x, y, z]");
             return;
@@ -135,8 +133,14 @@ export class KeyframeHelper {
                 this._previousRelativeLocation
             );
 
-            console.log("this._currentRealLocation: ", this._currentRealLocation);
-            console.log("this._previousRealLocation: ", this._previousRealLocation);
+            console.log(
+                "this._currentRealLocation: ",
+                this._currentRealLocation
+            );
+            console.log(
+                "this._previousRealLocation: ",
+                this._previousRealLocation
+            );
 
             console.log("diffRel: ", diffRel);
             console.log("diffReal: ", diffReal);
@@ -147,7 +151,7 @@ export class KeyframeHelper {
                 diffReal[2] / diffRel[2]
             ];
 
-            this._gridScale = scale;
+            this._gridScale = scale.map(item => Math.abs(item));
         } else {
             console.warn("KeyframeHelper not initialized");
         }

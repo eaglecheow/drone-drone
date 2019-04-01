@@ -157,12 +157,20 @@ server.on("connection", async sock => {
                         return;
                     }
 
-                    // let droneData = DataParser.stringToDroneData(dataString);
-
-                    // ServiceLayer.startLocation = droneData.startLoc;
-                    // ServiceLayer.endLocation = droneData.endLoc;
-                    // ServiceLayer.currentLocation = droneData.currentLoc;
-                    // ServiceLayer.currentBearing = droneData.currentBearing;
+                    //Request new path
+                    if (dataString.startsWith("PATHEND://")) {
+                        console.log("Control layer requests for new path...");
+                        console.log("Sending new path...");
+                        if (!ServiceLayer.finder) {
+                            console.log("Finder not initialized yet...");
+                            return;
+                        }
+                        let tcpString = TcpStringGenerator.finderToTCP(
+                            ServiceLayer.finder
+                        );
+                        droneClient.write(tcpString);
+                        return;
+                    }
                 });
 
                 droneClient.on("end", () => {
@@ -171,10 +179,8 @@ server.on("connection", async sock => {
             }, droneClientInitDelay);
         } else {
             /** Iteration */
-            ServiceLayer.iterate(dataString, finder => {
-                const controlTcpString = TcpStringGenerator.finderToTCP(finder);
-                droneClient.write(controlTcpString);
-            });
+            console.log("Calculating new possible path...");
+            ServiceLayer.iterate(dataString);
         }
     });
 
