@@ -3,6 +3,7 @@ import { Finder } from "./pathfinding/Finder";
 import { devConfig } from "./config";
 import { KeyframeHelper } from "./helper/KeyframeHelper";
 import { MapScale } from "./layergeneration/MapScale";
+import { PathPlanner } from "./pathplanning/PathPlanner";
 
 interface ScaleValue {
     gridSize: number[];
@@ -20,18 +21,16 @@ export class ServiceLayer {
     private static _isInit: boolean = false;
     private static _currentLocation: number[] = [0, 0];
     private static _currentBearing: number = 0;
-    private static _startLocation: number[] = [0, 0];
-    private static _endLocation: number[][] = [];
     private static _gridScale: number[] = [1, 1, 1];
     private static _keyframeHelper: KeyframeHelper;
     private static _isControlInit: boolean = false;
     private static _isPerceptionInit: boolean = false;
     private static _finder: Finder;
+    private static _pathPlanner: PathPlanner;
 
     private static initStatus = {
         gridScale: false,
-        startPoint: false,
-        endPoint: false,
+        pathPlanner: false,
         currentLocation: false,
         currentBearing: false
     };
@@ -62,24 +61,6 @@ export class ServiceLayer {
 
         this._currentBearing = value;
         this.initStatus.currentBearing = true;
-    }
-
-    public static get startLocation(): number[] {
-        return this._startLocation;
-    }
-
-    public static set startLocation(value: number[]) {
-        this._startLocation = value;
-        this.initStatus.startPoint = true;
-    }
-
-    public static get endLocation(): number[][] {
-        return this._endLocation;
-    }
-
-    public static set endLocation(value: number[][]) {
-        this._endLocation = value;
-        this.initStatus.endPoint = true;
     }
 
     public static get gridScale(): number[] {
@@ -122,6 +103,17 @@ export class ServiceLayer {
         return this._finder;
     }
 
+    public static get pathPlanner(): PathPlanner {
+        return this._pathPlanner;
+    }
+
+    public static set pathPlanner(value: PathPlanner) {
+        if (value) {
+            this._pathPlanner = value;
+            this.initStatus.pathPlanner = true;
+        }
+    }
+
     public static init = () => {
         let initCondition = true;
         Object.values(ServiceLayer.initStatus).forEach(isInit => {
@@ -135,8 +127,8 @@ export class ServiceLayer {
                 [0, 0],
                 [5, 2],
                 ServiceLayer.currentLocation,
-                ServiceLayer.startLocation,
-                ServiceLayer.endLocation[0],
+                ServiceLayer.pathPlanner.currentPath.startPoint,
+                ServiceLayer.pathPlanner.currentPath.endPoint,
                 ServiceLayer.gridScale,
                 ServiceLayer.currentBearing
             );
@@ -146,6 +138,10 @@ export class ServiceLayer {
             console.warn("Not enough data, unable to initialize");
         }
     };
+
+    public static updateCurrentPoint(coordinate: number[]) {
+        throw new Error("Not Implemented");
+    }
 
     public static iterate(
         stringData: string,
@@ -162,7 +158,7 @@ export class ServiceLayer {
         let finder = new Finder(
             obstacleCategory,
             ServiceLayer.mapScale,
-            ServiceLayer.endLocation[0]
+            ServiceLayer.pathPlanner.currentPath.endPoint
         );
 
         ServiceLayer._finder = finder;

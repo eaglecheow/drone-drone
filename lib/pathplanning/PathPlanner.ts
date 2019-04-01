@@ -7,6 +7,7 @@ export class PathPlanner {
     private _currentPoint: number[];
     private _currentPath: Path;
     private _currentPathIndex: number = 0;
+    private _onPathChange: (direction: number) => void;
 
     public get startPoint(): number[] {
         return this._startPoint;
@@ -37,10 +38,15 @@ export class PathPlanner {
      * @param startPoint Starting point of the planned path (coordinate)
      * @param endPointList Designated endpoints for the drone to fly (list of coordinates)
      */
-    constructor(startPoint: number[], endPointList: number[][]) {
+    constructor(
+        startPoint: number[],
+        endPointList: number[][],
+        onPathChange: (direction: number) => void
+    ) {
         this._startPoint = startPoint;
         this._endPointList = endPointList;
         this._currentPoint = startPoint;
+        this._onPathChange = onPathChange;
 
         this._pathList[0] = new Path(this._startPoint, this._endPointList[0]);
 
@@ -60,6 +66,19 @@ export class PathPlanner {
     public switchToNextPath = () => {
         this._currentPathIndex++;
         this._currentPath = this._pathList[this._currentPathIndex];
+
+        let direction = geolib.getBearing(
+            {
+                latitude: this._currentPath.startPoint[0],
+                longitude: this._currentPath.startPoint[1]
+            },
+            {
+                latitude: this._currentPath.endPoint[0],
+                longitude: this._currentPath.endPoint[1]
+            }
+        );
+
+        this._onPathChange(direction);
     };
 
     /**

@@ -5,6 +5,7 @@ import { DataParser } from "./helper/DataParser";
 import { KeyframeHelper } from "./helper/KeyframeHelper";
 import { ProcessCaller } from "./helper/ProcessCaller";
 import { config } from "./config";
+import { PathPlanner } from "./pathplanning/PathPlanner";
 
 // ProcessCaller.callControlLayer(config.ctrlLayerLaunchfilePath);
 
@@ -116,20 +117,29 @@ server.on("connection", async sock => {
                             dataString
                         );
 
-                        ServiceLayer.startLocation = wayPointItem.startPoint;
-                        ServiceLayer.endLocation = wayPointItem.endPoints;
+                        ServiceLayer.pathPlanner = new PathPlanner(
+                            wayPointItem.startPoint,
+                            wayPointItem.endPoints,
+                            direction => {
+                                droneClient.write(`TURN://${direction}`);
+                            }
+                        );
 
                         console.log(
                             "ServiceLayer.isInit: ",
                             ServiceLayer.isInit
                         );
                         console.log(
-                            "ServiceLayer.startLocation: ",
-                            ServiceLayer.startLocation
+                            "ServiceLayer.pathPlanner.currentPath.startPoint: ",
+                            ServiceLayer.pathPlanner.currentPath.startPoint
                         );
                         console.log(
-                            "ServiceLayer.endLocation: ",
-                            ServiceLayer.endLocation
+                            "ServiceLayer.pathPlanner.currentPath.endPoint: ",
+                            ServiceLayer.pathPlanner.currentPath.endPoint
+                        );
+                        console.log(
+                            "ServiceLayer.pathPlanner.pathList: ",
+                            ServiceLayer.pathPlanner.pathList
                         );
 
                         return;
@@ -153,6 +163,9 @@ server.on("connection", async sock => {
                         console.log(
                             "ServiceLayer.isInit: ",
                             ServiceLayer.isInit
+                        );
+                        ServiceLayer.pathPlanner.updateCurrentPoint(
+                            currentLocItem.coordinate
                         );
                         return;
                     }
