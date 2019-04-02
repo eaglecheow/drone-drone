@@ -7,7 +7,7 @@ import { ProcessCaller } from "./helper/ProcessCaller";
 import { config } from "./config";
 import { PathPlanner } from "./pathplanning/PathPlanner";
 
-// ProcessCaller.callControlLayer(config.ctrlLayerLaunchfilePath);
+ProcessCaller.callControlLayer(config.ctrlLayerLaunchfilePath);
 
 let keyFrameHelper = new KeyframeHelper();
 
@@ -164,9 +164,11 @@ server.on("connection", async sock => {
                             "ServiceLayer.isInit: ",
                             ServiceLayer.isInit
                         );
-                        ServiceLayer.pathPlanner.updateCurrentPoint(
-                            currentLocItem.coordinate
-                        );
+                        if (ServiceLayer.pathPlanner) {
+                            ServiceLayer.pathPlanner.updateCurrentPoint(
+                                currentLocItem.coordinate
+                            );
+                        }
                         return;
                     }
 
