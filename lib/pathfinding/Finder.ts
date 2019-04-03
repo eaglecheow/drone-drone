@@ -10,6 +10,7 @@ export class Finder {
     private _obstacleCategory: ObstacleCategory;
     private _mapScale: MapScale;
     private _endCoordinate: number[];
+    private _currentFlightLevel: number;
 
     public get targetPathLevel(): number {
         return this._targetPathLevel;
@@ -47,22 +48,25 @@ export class Finder {
     constructor(
         obstacleCategory: ObstacleCategory,
         mapScale: MapScale,
-        endLocation: number[]
+        endLocation: number[],
+        currentFlightLevel: number
     ) {
         this._obstacleCategory = obstacleCategory;
         this._mapScale = mapScale;
         this._endCoordinate = endLocation;
+        this._currentFlightLevel = currentFlightLevel;
         this.calculatePathData();
     }
 
     private calculatePathData() {
         let verticalLevelFinder = new VerticalLevelFinder(
             this._obstacleCategory,
-            this._mapScale
+            this._mapScale,
+            this._currentFlightLevel
         );
         let layerObstacle: number[] = [];
 
-        switch (verticalLevelFinder.flightLevel) {
+        switch (verticalLevelFinder.targetPathLevel) {
             case 1: {
                 layerObstacle = this._obstacleCategory.level1;
                 break;
@@ -87,9 +91,12 @@ export class Finder {
             this._mapScale.referenceBearing
         );
 
-        let horizontalLevelFinder = new LocalLevelFinder(layerGrid, this._endCoordinate);
+        let horizontalLevelFinder = new LocalLevelFinder(
+            layerGrid,
+            this._endCoordinate
+        );
 
-        this._targetPathLevel = verticalLevelFinder.flightLevel;
+        this._targetPathLevel = verticalLevelFinder.targetPathLevel;
         this._targetPathRelative = horizontalLevelFinder.relativePath;
         this._targetPathGlobal = horizontalLevelFinder.globalPath;
     }

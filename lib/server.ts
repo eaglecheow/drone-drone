@@ -154,6 +154,8 @@ server.on("connection", async sock => {
                         ServiceLayer.currentLocation =
                             currentLocItem.coordinate;
                         ServiceLayer.currentBearing = currentLocItem.heading;
+                        ServiceLayer.currentFlightLevel =
+                            currentLocItem.flightLevel;
                         if (!ServiceLayer.isInit) {
                             console.log(
                                 "Attempting to initialize Service Layer..."
@@ -203,3 +205,8 @@ server.on("connection", async sock => {
         console.log("Socket closed");
     });
 });
+
+/** TODO: Flight Level modification
+ * 1. Request additional flight level data using the current location data
+ * 2. For every iteration, take consideration of current flight level
+ */
