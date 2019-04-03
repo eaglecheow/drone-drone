@@ -82,6 +82,9 @@ export class LocalLevelFinder {
             }
         });
 
+        console.log("emptySpaceList: ", emptySpaceList);
+        console.log("smallestDistanceIndex: ", smallestDistanceIndex);
+
         return emptySpaceList[smallestDistanceIndex];
     }
 

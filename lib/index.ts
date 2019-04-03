@@ -4,6 +4,7 @@ import { devConfig } from "./config";
 import { KeyframeHelper } from "./helper/KeyframeHelper";
 import { MapScale } from "./layergeneration/MapScale";
 import { PathPlanner } from "./pathplanning/PathPlanner";
+import fs from "fs";
 
 interface ScaleValue {
     gridSize: number[];
@@ -136,7 +137,15 @@ export class ServiceLayer {
             if (!isInit) initCondition = false;
         });
 
+        console.log("initCondition: ", initCondition);
+        console.log(Object.values(ServiceLayer.initStatus));
         if (initCondition) {
+            console.log("ServiceLayer.gridScale: ", ServiceLayer.gridScale);
+            fs.appendFile("/home/jiaming/Desktop/droneLog.txt", ServiceLayer.gridScale + "\n", err => {
+                if (err) {
+                    throw new Error(err.message);
+                }
+            })
             ServiceLayer.mapScale = new MapScale(
                 [5, 30],
                 [0, 0],
@@ -168,6 +177,17 @@ export class ServiceLayer {
         }
 
         if (stringData.length <= 0) return;
+
+        ServiceLayer.mapScale = new MapScale(
+            [5, 30],
+            [0, 0],
+            [5, 2],
+            ServiceLayer.currentLocation,
+            ServiceLayer.pathPlanner.currentPath.startPoint,
+            ServiceLayer.pathPlanner.currentPath.endPoint,
+            ServiceLayer.gridScale,
+            ServiceLayer.currentBearing
+        );
 
         let obstacleCategory = DataParser.stringToGrid(stringData, [3, 5]);
         let finder = new Finder(

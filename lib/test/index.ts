@@ -1,69 +1,69 @@
-import { DataParser } from "../helper/DataParser";
-import { Finder } from "../pathfinding/Finder";
-import { ObstacleCategory } from "../layergeneration";
-import { ServiceLayer } from "../index";
-import { devConfig } from "../config";
-import { KeyframeHelper } from "../helper/KeyframeHelper";
-import { MapScale } from "../layergeneration/MapScale";
-import { TcpStringGenerator } from "../helper/TcpStringGenerator";
-import { PathPlanner } from "../pathplanning/PathPlanner";
+// import { DataParser } from "../helper/DataParser";
+// import { Finder } from "../pathfinding/Finder";
+// import { ObstacleCategory } from "../layergeneration";
+// import { ServiceLayer } from "../index";
+// import { devConfig } from "../config";
+// import { KeyframeHelper } from "../helper/KeyframeHelper";
+// import { MapScale } from "../layergeneration/MapScale";
+// import { TcpStringGenerator } from "../helper/TcpStringGenerator";
+// import { PathPlanner } from "../pathplanning/PathPlanner";
 
-const exampleString4 =
-    "0,0.968517,0,0.770111,0.385994,0.896283,0.919713,0.936407,0.932002,0.926296,1.11689,1.30847,1.16218,1.19196,1.26318,";
+// const exampleString4 =
+//     "0,0.968517,0,0.770111,0.385994,0.896283,0.919713,0.936407,0.932002,0.926296,1.11689,1.30847,1.16218,1.19196,1.26318,";
 
-const serviceLayerTest = () => {
-    ServiceLayer.currentBearing = 12;
-    ServiceLayer.currentLocation = devConfig.currentLocation;
-    // ServiceLayer.endLocation = [devConfig.endLocation];
+// const serviceLayerTest = () => {
+//     ServiceLayer.currentBearing = 12;
+//     ServiceLayer.currentLocation = devConfig.currentLocation;
+//     // ServiceLayer.endLocation = [devConfig.endLocation];
 
-    let keyFrameHelper = new KeyframeHelper();
-    keyFrameHelper.currentRealLocation = [2, 2, 2];
-    keyFrameHelper.currentRelativeLocation = [0.9, 0.9, 0.9];
+//     let keyFrameHelper = new KeyframeHelper();
+//     keyFrameHelper.currentRealLocation = [2, 2, 2];
+//     keyFrameHelper.currentRelativeLocation = [0.9, 0.9, 0.9];
 
-    keyFrameHelper.currentRealLocation = [3, 3, 3];
-    keyFrameHelper.currentRelativeLocation = [1.2, 1.2, 1.2];
+//     keyFrameHelper.currentRealLocation = [3, 3, 3];
+//     keyFrameHelper.currentRelativeLocation = [1.2, 1.2, 1.2];
 
-    console.log("keyFrameHelper.gridScale", keyFrameHelper.gridScale);
-    console.log("keyFrameHelper.isInit", keyFrameHelper.isInit);
+//     console.log("keyFrameHelper.gridScale", keyFrameHelper.gridScale);
+//     console.log("keyFrameHelper.isInit", keyFrameHelper.isInit);
 
-    console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
+//     console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
 
-    ServiceLayer.keyframeHelper = keyFrameHelper;
+//     ServiceLayer.keyframeHelper = keyFrameHelper;
 
-    ServiceLayer.startLocation = [2.943999, 101.876484];
-    ServiceLayer.endLocation = [[2.943999, 102.876484]];
+//     ServiceLayer.startLocation = [2.943999, 101.876484];
+//     ServiceLayer.endLocation = [[2.943999, 102.876484]];
 
-    console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
+//     console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
 
-    ServiceLayer.init();
+//     ServiceLayer.init();
 
-    console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
+//     console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
 
-    ServiceLayer.iterate(exampleString4, finder => {
-        let tcpString = TcpStringGenerator.finderToTCP(finder);
-        console.log("tcpString: ", tcpString);
-    });
-};
+//     ServiceLayer.iterate(exampleString4, finder => {
+//         let tcpString = TcpStringGenerator.finderToTCP(finder);
+//         console.log("tcpString: ", tcpString);
+//     });
+// };
 
-const pathPlannerTest = () => {
-    let startLocation = [2.943999, 101.876484];
-    let endLocations = [
-        [2.943999, 102.876484],
-        [3.043999, 102.876484],
-        [3.043999, 101.876484]
-    ];
+// const pathPlannerTest = () => {
+//     let startLocation = [2.943999, 101.876484];
+//     let endLocations = [
+//         [2.943999, 102.876484],
+//         [3.043999, 102.876484],
+//         [3.043999, 101.876484]
+//     ];
 
-    let planner = new PathPlanner(startLocation, endLocations);
+//     let planner = new PathPlanner(startLocation, endLocations);
 
-    console.log("planner.pathList: ", planner.pathList);
+//     console.log("planner.pathList: ", planner.pathList);
 
-    let currentPath = planner.pathList[0];
-    let testCoordinate = [2.943998, 101.976484];
+//     let currentPath = planner.pathList[0];
+//     let testCoordinate = [2.943998, 101.976484];
 
-    console.log(
-        "currentPath.checkPointInPath(testCoordinate): ",
-        currentPath.checkPointInPath(testCoordinate)
-    );
-};
+//     console.log(
+//         "currentPath.checkPointInPath(testCoordinate): ",
+//         currentPath.checkPointInPath(testCoordinate)
+//     );
+// };
 
-pathPlannerTest();
+// pathPlannerTest();

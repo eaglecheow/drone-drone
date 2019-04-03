@@ -35,10 +35,10 @@ export class TcpStringGenerator {
                 3
             );
 
-            const bearing = geolib.getBearing(
+            const bearing = Math.floor(geolib.getBearing(
                 currentCoordinate,
                 nextCoordinate
-            );
+            ));
 
             distanceList.push(distance);
             bearingList.push(bearing);

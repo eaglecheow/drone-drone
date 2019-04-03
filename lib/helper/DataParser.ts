@@ -55,7 +55,9 @@ export class DataParser {
         y: number;
         z: number;
     } {
-        let inputString = tcpString.replace("K:", "");
+        console.log("tcpString: ", tcpString);
+        let inputString = tcpString.substring(0, tcpString.length - 1);
+        inputString = inputString.replace("K:", "");
         let stringArray = inputString.split(",");
 
         if (stringArray.length !== 3)

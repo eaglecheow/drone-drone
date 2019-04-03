@@ -6,8 +6,9 @@ import { KeyframeHelper } from "./helper/KeyframeHelper";
 import { ProcessCaller } from "./helper/ProcessCaller";
 import { config } from "./config";
 import { PathPlanner } from "./pathplanning/PathPlanner";
+import fs from "fs";
 
-ProcessCaller.callControlLayer(config.ctrlLayerLaunchfilePath);
+// ProcessCaller.callControlLayer(config.ctrlLayerLaunchfilePath);
 
 let keyFrameHelper = new KeyframeHelper();
 
@@ -104,7 +105,7 @@ server.on("connection", async sock => {
                                 "Notifying other layers Service Layer keyframe init complete"
                             );
                             droneClient.write("INIT://SERV@KEYFRAME");
-                            sock.write("INIT://SERV@KEYFRAME");
+                            // sock.write("INIT://SERV@KEYFRAME");
                             isKeyframeInitSent = true;
                         }
 
@@ -185,7 +186,9 @@ server.on("connection", async sock => {
                         let tcpString = TcpStringGenerator.finderToTCP(
                             ServiceLayer.finder
                         );
+                        console.log("tcpString: ", tcpString);
                         droneClient.write(tcpString);
+
                         return;
                     }
                 });
@@ -198,6 +201,14 @@ server.on("connection", async sock => {
             /** Iteration */
             console.log("Calculating new possible path...");
             ServiceLayer.iterate(dataString);
+            if (!ServiceLayer.finder) return;
+            fs.appendFile(
+                "/home/jiaming/Desktop/droneLog.txt",
+                TcpStringGenerator.finderToTCP(ServiceLayer.finder) + "\n",
+                err => {
+                    if (err) throw new Error(err.message);
+                }
+            );
         }
     });
 
