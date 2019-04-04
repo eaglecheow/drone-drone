@@ -208,7 +208,7 @@ server.on("connection", async sock => {
                 err => {
                     if (err) throw new Error(err.message);
                 }
-            );
+        );
         }
     });
 
