@@ -83,8 +83,15 @@ export class LocalLevelFinder {
         });
 
         if (emptySpaceList.length === 0) {
-            //TODO: Handle no empty space
-            throw new Error("No empty space possible to fly");
+            console.log(
+                "No free space detected, assign start point as end point, flight should stop..."
+            );
+            let relativeGrid = this._localLevelGrid.relativeGrid;
+            let startPointX = Math.floor(relativeGrid[0].length / 2);
+            let startPointZ = 0;
+
+            return [startPointX, startPointZ];
+            // throw new Error("No empty space possible to fly");
         }
 
         return emptySpaceList[smallestDistanceIndex];
