@@ -6,6 +6,7 @@ export class KeyframeHelper {
     private _previousRealLocation: number[] = [];
     private _currentRealLocation: number[] = [];
     private _gridScale: number[] = [1, 1, 1];
+    private _scaleCollection: number[][] = [];
 
     private initStatus = {
         previousRelLoc: false,
@@ -151,7 +152,45 @@ export class KeyframeHelper {
                 diffReal[2] / diffRel[2]
             ];
 
-            this._gridScale = scale.map(item => Math.abs(item));
+            let xArray = this._scaleCollection.map(
+                scaleCollection => scaleCollection[0]
+            );
+            let yArray = this._scaleCollection.map(
+                scaleCollection => scaleCollection[1]
+            );
+            let zArray = this._scaleCollection.map(
+                scaleCollection => scaleCollection[2]
+            );
+
+            let xAverage =
+                [scale[0], ...xArray].reduce((a, b) => a + b) /
+                (xArray.length + 1);
+            let yAverage =
+                [scale[1], ...yArray].reduce((a, b) => a + b) /
+                (yArray.length + 1);
+            let zAverage =
+                [scale[2], ...zArray].reduce((a, b) => a + b) /
+                (zArray.length + 1);
+
+            console.log([scale[0], ...xArray]);
+            console.log(xArray.length + 1);
+            console.log([scale[0], ...xArray].reduce((a, b) => a + b));
+            console.log("xAverage: ", xAverage);
+            console.log("yAverage: ", yAverage);
+            console.log("zAverage: ", zAverage);
+
+            console.log("xArray.length: ", xArray.length);
+
+            this._gridScale = [xAverage, yAverage, zAverage].map(item =>
+                Math.abs(item)
+            );
+            console.log("this._gridScale_1: ", this._gridScale);
+            if (this._scaleCollection.length > 5) {
+                this._scaleCollection.shift();
+            }
+            this._scaleCollection.push([xAverage, yAverage, zAverage]);
+
+            // this._gridScale = scale.map(item => Math.abs(item));
         } else {
             console.warn("KeyframeHelper not initialized");
         }

@@ -44,48 +44,6 @@ export class DataParser {
         return obstacleCategory;
     }
 
-    // /**
-    //  * Converts tcp string data from drone server to server reaadable format
-    //  * @param tcpString TCP String to convert
-    //  */
-    // public static stringToDroneData(
-    //     tcpString: string
-    // ): {
-    //     startLoc: number[];
-    //     endLoc: number[][];
-    //     currentLoc: number[];
-    //     currentBearing: number;
-    // } {
-    //     let dataArray = tcpString.split("/");
-
-    //     let startLoc: number[] = [];
-    //     let endLoc: number[][] = [];
-    //     let currentLoc: number[] = [];
-    //     let currentBearing = parseFloat(dataArray[3]);
-
-    //     dataArray[0].split("@").forEach((coordinateItem, index) => {
-    //         startLoc[index] = parseFloat(coordinateItem);
-    //     });
-
-    //     dataArray[2].split("@").forEach((coordinateItem, index) => {
-    //         currentLoc[index] = parseFloat(coordinateItem);
-    //     });
-
-    //     dataArray[1].split(",").forEach((coordinateString, i) => {
-    //         if (!endLoc[i]) endLoc[i] = [];
-    //         coordinateString.split("@").forEach((coordinateItem, j) => {
-    //             endLoc[i][j] = parseFloat(coordinateItem);
-    //         });
-    //     });
-
-    //     return {
-    //         startLoc,
-    //         endLoc,
-    //         currentLoc,
-    //         currentBearing
-    //     };
-    // }
-
     /**
      * Converts keyframe TCP from perception layer to relative x, y, z
      * @param tcpString TCP string to convert
@@ -97,7 +55,9 @@ export class DataParser {
         y: number;
         z: number;
     } {
-        let inputString = tcpString.replace("K:", "");
+        console.log("tcpString: ", tcpString);
+        let inputString = tcpString.substring(0, tcpString.length - 1);
+        inputString = inputString.replace("K:", "");
         let stringArray = inputString.split(",");
 
         if (stringArray.length !== 3)
@@ -164,6 +124,7 @@ export class DataParser {
         coordinate: number[];
         altitude: number;
         heading: number;
+        flightLevel: number;
     } {
         let data = currentLocationString
             .substring(6)
@@ -173,7 +134,8 @@ export class DataParser {
         return {
             coordinate: [data[0], data[1]],
             altitude: data[2],
-            heading: data[3]
+            heading: data[3],
+            flightLevel: data[4]
         };
     }
 }

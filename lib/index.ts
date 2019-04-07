@@ -4,6 +4,7 @@ import { devConfig } from "./config";
 import { KeyframeHelper } from "./helper/KeyframeHelper";
 import { MapScale } from "./layergeneration/MapScale";
 import { PathPlanner } from "./pathplanning/PathPlanner";
+import fs from "fs";
 
 interface ScaleValue {
     gridSize: number[];
@@ -21,6 +22,7 @@ export class ServiceLayer {
     private static _isInit: boolean = false;
     private static _currentLocation: number[] = [0, 0];
     private static _currentBearing: number = 0;
+    private static _currentFlightLevel: number = 2;
     private static _gridScale: number[] = [1, 1, 1];
     private static _keyframeHelper: KeyframeHelper;
     private static _isControlInit: boolean = false;
@@ -32,7 +34,8 @@ export class ServiceLayer {
         gridScale: false,
         pathPlanner: false,
         currentLocation: false,
-        currentBearing: false
+        currentBearing: false,
+        currentFlightLevel: false
     };
 
     private static mapScale: MapScale;
@@ -61,6 +64,19 @@ export class ServiceLayer {
 
         this._currentBearing = value;
         this.initStatus.currentBearing = true;
+    }
+
+    public static get currentFlightLevel(): number {
+        return this._currentFlightLevel;
+    }
+
+    public static set currentFlightLevel(value: number) {
+        if (0 < value && value < 4) {
+            this._currentFlightLevel = value;
+            this.initStatus.currentFlightLevel = true;
+        } else {
+            console.log("Invalid flight level");
+        }
     }
 
     public static get gridScale(): number[] {
@@ -121,7 +137,15 @@ export class ServiceLayer {
             if (!isInit) initCondition = false;
         });
 
+        console.log("initCondition: ", initCondition);
+        console.log(Object.values(ServiceLayer.initStatus));
         if (initCondition) {
+            console.log("ServiceLayer.gridScale: ", ServiceLayer.gridScale);
+            fs.appendFile("/home/jiaming/Desktop/droneLog.txt", ServiceLayer.gridScale + "\n", err => {
+                if (err) {
+                    throw new Error(err.message);
+                }
+            })
             ServiceLayer.mapScale = new MapScale(
                 [5, 30],
                 [0, 0],
@@ -154,11 +178,23 @@ export class ServiceLayer {
 
         if (stringData.length <= 0) return;
 
+        ServiceLayer.mapScale = new MapScale(
+            [5, 30],
+            [0, 0],
+            [5, 2],
+            ServiceLayer.currentLocation,
+            ServiceLayer.pathPlanner.currentPath.startPoint,
+            ServiceLayer.pathPlanner.currentPath.endPoint,
+            ServiceLayer.gridScale,
+            ServiceLayer.currentBearing
+        );
+
         let obstacleCategory = DataParser.stringToGrid(stringData, [3, 5]);
         let finder = new Finder(
             obstacleCategory,
-            ServiceLayer.mapScale,
-            ServiceLayer.pathPlanner.currentPath.endPoint
+            this.mapScale,
+            this._pathPlanner.currentPath.endPoint,
+            this._currentFlightLevel
         );
 
         ServiceLayer._finder = finder;
