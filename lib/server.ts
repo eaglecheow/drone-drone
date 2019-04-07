@@ -33,35 +33,44 @@ server.on("connection", async sock => {
         if (dataString.startsWith("K:")) {
             //Toggle Perception Layer initialized if previously false
             //Notifies Control layer that perception layer init complete
-            if (!ServiceLayer.isPerceptionInit) {
-                console.log(
-                    "Perception Layer sent first keyframe, Perception Layer init complete..."
+
+            if (droneClient) {
+                if (!ServiceLayer.isPerceptionInit) {
+                    console.log(
+                        "Perception Layer sent first keyframe, Perception Layer init complete..."
+                    );
+                    ServiceLayer.isPerceptionInit = true;
+                    console.log(
+                        "Notifying Control Layer that Perception Layer init complete..."
+                    );
+                    droneClient.write(
+                        TcpStringGenerator.perceptionLayerInitCompleteTcp()
+                    );
+                    return;
+                }
+
+                /** Keyframe */
+                let currentRelativeFrameObj = DataParser.stringToKeyFrame(
+                    dataString
                 );
-                ServiceLayer.isPerceptionInit = true;
-                console.log(
-                    "Notifying Control Layer that Perception Layer init complete..."
-                );
+
+                keyFrameHelper.currentRelativeLocation = [
+                    currentRelativeFrameObj.x,
+                    currentRelativeFrameObj.y,
+                    currentRelativeFrameObj.z
+                ];
+
+                console.log("keyFrameHelper.isInit: ", keyFrameHelper.isInit);
+
+                console.log("Pinging Control Layer for real location...");
                 droneClient.write(
-                    TcpStringGenerator.perceptionLayerInitCompleteTcp()
+                    TcpStringGenerator.controlLayerLocationPingTcp()
                 );
-                return;
+            } else {
+                console.warn(
+                    "Received K: but drone client not init, ignoring..."
+                );
             }
-
-            /** Keyframe */
-            let currentRelativeFrameObj = DataParser.stringToKeyFrame(
-                dataString
-            );
-
-            keyFrameHelper.currentRelativeLocation = [
-                currentRelativeFrameObj.x,
-                currentRelativeFrameObj.y,
-                currentRelativeFrameObj.z
-            ];
-
-            console.log("keyFrameHelper.isInit: ", keyFrameHelper.isInit);
-
-            console.log("Pinging Control Layer for real location...");
-            droneClient.write(TcpStringGenerator.controlLayerLocationPingTcp());
         } else if (dataString.startsWith("droneserver")) {
             console.log("Control Layer requested for client connection...");
             console.log(
@@ -208,7 +217,7 @@ server.on("connection", async sock => {
                 err => {
                     if (err) throw new Error(err.message);
                 }
-        );
+            );
         }
     });
 
