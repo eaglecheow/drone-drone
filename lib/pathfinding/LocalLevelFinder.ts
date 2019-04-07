@@ -82,8 +82,10 @@ export class LocalLevelFinder {
             }
         });
 
-        console.log("emptySpaceList: ", emptySpaceList);
-        console.log("smallestDistanceIndex: ", smallestDistanceIndex);
+        if (emptySpaceList.length === 0) {
+            //TODO: Handle no empty space
+            throw new Error("No empty space possible to fly");
+        }
 
         return emptySpaceList[smallestDistanceIndex];
     }
@@ -94,15 +96,6 @@ export class LocalLevelFinder {
     private findRelativePath(): void {
         let relativeGrid = this._localLevelGrid.relativeGrid;
         let targetPoint = this.findEndPoint();
-
-        // //Find furthest possible point
-        // for (let i = 0; i < relativeGrid.length; i++) {
-        //     for (let j = 0; j < relativeGrid[i].length; j++) {
-        //         if (relativeGrid[i][j] === 0) {
-        //             targetPoint = [j, i];
-        //         }
-        //     }
-        // }
 
         //Set path points
         const startPointX = Math.floor(relativeGrid[0].length / 2);
