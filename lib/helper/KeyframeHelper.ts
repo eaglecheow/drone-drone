@@ -188,7 +188,7 @@ export class KeyframeHelper {
             if (this._scaleCollection.length > 5) {
                 this._scaleCollection.shift();
             }
-            this._scaleCollection.push([xAverage, yAverage, zAverage]);
+            this._scaleCollection.push(this._gridScale);
 
             // this._gridScale = scale.map(item => Math.abs(item));
         } else {

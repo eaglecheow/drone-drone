@@ -134,7 +134,7 @@ server.on("connection", async sock => {
                                 droneClient.write(`TURN://${direction}`);
                             }
                         );
-
+//This line
                         console.log(
                             "ServiceLayer.isInit: ",
                             ServiceLayer.isInit
