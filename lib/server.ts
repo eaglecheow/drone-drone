@@ -211,6 +211,7 @@ server.on("connection", async sock => {
             console.log("Calculating new possible path...");
             ServiceLayer.iterate(dataString);
             if (!ServiceLayer.finder) return;
+            console.log(ServiceLayer.finder)
             fs.appendFile(
                 "/home/jiaming/Desktop/droneLog.txt",
                 TcpStringGenerator.finderToTCP(ServiceLayer.finder) + "\n",

@@ -91,6 +91,8 @@ export class Finder {
             this._mapScale.referenceBearing
         );
 
+        console.log("layerGrid: ", layerGrid);
+
         let horizontalLevelFinder = new LocalLevelFinder(
             layerGrid,
             this._endCoordinate

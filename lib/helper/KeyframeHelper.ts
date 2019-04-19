@@ -1,3 +1,5 @@
+import { config } from "config";
+
 export class KeyframeHelper {
     private _isInit: boolean = false;
     private _acceptRealLoc: boolean = false;
@@ -110,6 +112,13 @@ export class KeyframeHelper {
 
     private iterateGridScale = () => {
         if (this.isInit) {
+            if (config.forceDefaultGridScale) {
+                this._gridScale = config.defaultGridScale.map(element =>
+                    Math.abs(element)
+                );
+                return;
+            }
+
             let diffRel = [
                 this._currentRelativeLocation[0] -
                     this._previousRelativeLocation[0],
@@ -171,6 +180,15 @@ export class KeyframeHelper {
             let zAverage =
                 [scale[2], ...zArray].reduce((a, b) => a + b) /
                 (zArray.length + 1);
+
+            for (let i = 0; i < scale.length; i++) {
+                if (
+                    scale[i] < config.minAllowedGridScale[i] ||
+                    config.maxAllowedGridScale[i] < scale[i]
+                ) {
+                    return;
+                }
+            }
 
             console.log([scale[0], ...xArray]);
             console.log(xArray.length + 1);
