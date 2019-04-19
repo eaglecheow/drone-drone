@@ -1,4 +1,5 @@
-import { config } from "config";
+import { config } from "../config";
+import fs from "fs";
 
 export class KeyframeHelper {
     private _isInit: boolean = false;
@@ -107,6 +108,15 @@ export class KeyframeHelper {
 
     public get gridScale(): number[] {
         this.iterateGridScale();
+        fs.appendFile(
+            "/home/jiaming/Desktop/gridScaleLog.txt",
+            `${this._gridScale[0]}, ${this._gridScale[1]}, ${
+                this._gridScale[2]
+            }` + "\n",
+            err => {
+                if (err) throw new Error(err.message);
+            }
+        );
         return this._gridScale;
     }
 
