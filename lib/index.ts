@@ -206,6 +206,7 @@ export class ServiceLayer {
         fs.appendFile(
             "/home/jiaming/Desktop/droneResult.txt",
             `
+            [${new Date(Date.now())}]
             Current Location: ${ServiceLayer.currentLocation[0]}, ${
                 ServiceLayer.currentLocation[1]
             }

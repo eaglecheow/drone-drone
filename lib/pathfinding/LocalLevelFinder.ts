@@ -143,8 +143,8 @@ export class LocalLevelFinder {
         fs.appendFile(
             "/home/jiaming/Desktop/droneResult.txt",
             `
-            Relative Grid: ${relativeGrid.map(value => {
-                return `[${value}]`;
+            Relative Grid: \n ${relativeGrid.map(value => {
+                return `[${value}]\n`;
             })}
 
             Endpoint: ${targetPoint}
