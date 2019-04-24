@@ -49,6 +49,14 @@ server.on("connection", async sock => {
                     return;
                 }
 
+                fs.appendFile(
+                    "/home/jiaming/Desktop/droneLog.txt",
+                    "Keyframe" + dataString + "\n",
+                    err => {
+                        if (err) throw new Error(err.message);
+                    }
+                );
+
                 /** Keyframe */
                 let currentRelativeFrameObj = DataParser.stringToKeyFrame(
                     dataString
@@ -207,13 +215,20 @@ server.on("connection", async sock => {
                 });
             }, droneClientInitDelay);
         } else {
+            fs.appendFile(
+                "/home/jiaming/Desktop/droneLog.txt",
+                "Obstacle data: " + dataString + "\n",
+                err => {
+                    if (err) throw new Error(err.message);
+                }
+            );
             /** Iteration */
             console.log("Calculating new possible path...");
             ServiceLayer.iterate(dataString);
             if (!ServiceLayer.finder) return;
             fs.appendFile(
                 "/home/jiaming/Desktop/droneLog.txt",
-                TcpStringGenerator.finderToTCP(ServiceLayer.finder) + "\n",
+                "Path: " + TcpStringGenerator.finderToTCP(ServiceLayer.finder) + "\n",
                 err => {
                     if (err) throw new Error(err.message);
                 }
