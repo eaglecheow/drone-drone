@@ -102,7 +102,19 @@ export class LocalLevelFinder {
      */
     private findRelativePath(): void {
         let relativeGrid = this._localLevelGrid.relativeGrid;
-        let targetPoint = this.findEndPoint();
+        // let targetPoint = this.findEndPoint();
+
+        let targetPoint = [0, 0];
+
+        //FIXME: WARNING: REMOVE THIS ON REAL TEST
+        //Find furthest possible point
+        for (let i = 0; i < relativeGrid.length; i++) {
+            for (let j = 0; j < relativeGrid[i].length; j++) {
+                if (relativeGrid[i][j] === 0) {
+                    targetPoint = [j, i];
+                }
+            }
+        }
 
         //Set path points
         const startPointX = Math.floor(relativeGrid[0].length / 2);
