@@ -1,69 +1,11 @@
-// import { DataParser } from "../helper/DataParser";
-// import { Finder } from "../pathfinding/Finder";
-// import { ObstacleCategory } from "../layergeneration";
-// import { ServiceLayer } from "../index";
-// import { devConfig } from "../config";
-// import { KeyframeHelper } from "../helper/KeyframeHelper";
-// import { MapScale } from "../layergeneration/MapScale";
-// import { TcpStringGenerator } from "../helper/TcpStringGenerator";
-// import { PathPlanner } from "../pathplanning/PathPlanner";
+import { LocalLevelFinder } from "../pathfinding/LocalLevelFinder";
+import { GlobalObstacleGrid } from "../layergeneration";
+import { Finder } from "../pathfinding/Finder";
+import { DataParser } from "../helper/DataParser";
+import { MapScale } from "../layergeneration/MapScale";
 
-// const exampleString4 =
-//     "0,0.968517,0,0.770111,0.385994,0.896283,0.919713,0.936407,0.932002,0.926296,1.11689,1.30847,1.16218,1.19196,1.26318,";
+let obstacleCategory = DataParser.stringToGrid("18.573,19.797,1.97634,20.0304,20.3285,23.0318,10.4059,2.788,10.6897,11.3524,0,1.43265,1.93944,6.10853,0,", [3, 5]);
+let mapScale = new MapScale([5, 30], [0, 0], [5, 2], [2.942662, 101.8740943], [2.942662, 101.8740943], [2.942662, 101.8740943], [5, 5, 5], 20);
+let finder = new Finder(obstacleCategory, mapScale, [2.942662, 101.8740943], 2);
 
-// const serviceLayerTest = () => {
-//     ServiceLayer.currentBearing = 12;
-//     ServiceLayer.currentLocation = devConfig.currentLocation;
-//     // ServiceLayer.endLocation = [devConfig.endLocation];
-
-//     let keyFrameHelper = new KeyframeHelper();
-//     keyFrameHelper.currentRealLocation = [2, 2, 2];
-//     keyFrameHelper.currentRelativeLocation = [0.9, 0.9, 0.9];
-
-//     keyFrameHelper.currentRealLocation = [3, 3, 3];
-//     keyFrameHelper.currentRelativeLocation = [1.2, 1.2, 1.2];
-
-//     console.log("keyFrameHelper.gridScale", keyFrameHelper.gridScale);
-//     console.log("keyFrameHelper.isInit", keyFrameHelper.isInit);
-
-//     console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
-
-//     ServiceLayer.keyframeHelper = keyFrameHelper;
-
-//     ServiceLayer.startLocation = [2.943999, 101.876484];
-//     ServiceLayer.endLocation = [[2.943999, 102.876484]];
-
-//     console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
-
-//     ServiceLayer.init();
-
-//     console.log("ServiceLayer.isInit: ", ServiceLayer.isInit);
-
-//     ServiceLayer.iterate(exampleString4, finder => {
-//         let tcpString = TcpStringGenerator.finderToTCP(finder);
-//         console.log("tcpString: ", tcpString);
-//     });
-// };
-
-// const pathPlannerTest = () => {
-//     let startLocation = [2.943999, 101.876484];
-//     let endLocations = [
-//         [2.943999, 102.876484],
-//         [3.043999, 102.876484],
-//         [3.043999, 101.876484]
-//     ];
-
-//     let planner = new PathPlanner(startLocation, endLocations);
-
-//     console.log("planner.pathList: ", planner.pathList);
-
-//     let currentPath = planner.pathList[0];
-//     let testCoordinate = [2.943998, 101.976484];
-
-//     console.log(
-//         "currentPath.checkPointInPath(testCoordinate): ",
-//         currentPath.checkPointInPath(testCoordinate)
-//     );
-// };
-
-// pathPlannerTest();
+console.log(finder.targetPathRelative);

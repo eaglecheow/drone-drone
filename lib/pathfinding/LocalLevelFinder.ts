@@ -2,6 +2,7 @@ import { GlobalObstacleGrid } from "../layergeneration/GlobalObstacleGrid";
 import PathFinding from "pathfinding";
 import { devConfig } from "../config";
 import geolib from "geolib";
+import fs from "fs";
 
 export class LocalLevelFinder {
     private _localLevelGrid: GlobalObstacleGrid;
@@ -102,6 +103,7 @@ export class LocalLevelFinder {
      */
     private findRelativePath(): void {
         let relativeGrid = this._localLevelGrid.relativeGrid;
+
         // let targetPoint = this.findEndPoint();
 
         let targetPoint = [0, 0];
@@ -116,6 +118,42 @@ export class LocalLevelFinder {
             }
         }
 
+        if (
+            relativeGrid[relativeGrid.length - 1][
+                Math.floor(relativeGrid[relativeGrid.length - 1].length / 2)
+            ] === 0
+        ) {
+            console.log("Lalalalalalla");
+            targetPoint = [
+                Math.floor(relativeGrid[relativeGrid.length - 1].length / 2),
+                relativeGrid.length - 1
+            ];
+        }
+
+        console.log(
+            "Haaa: ",
+            relativeGrid[relativeGrid.length - 1][
+                Math.floor(relativeGrid[relativeGrid.length - 1].length / 2)
+            ]
+        );
+
+        console.log(relativeGrid);
+        console.log("TargetPoint: ", targetPoint);
+
+        fs.appendFile(
+            "/home/jiaming/Desktop/droneResult.txt",
+            `
+            Relative Grid: ${relativeGrid.map(value => {
+                return `[${value}]`;
+            })}
+
+            Endpoint: ${targetPoint}
+        `,
+            err => {
+                if (err) throw new Error(err.message);
+            }
+        );
+
         //Set path points
         const startPointX = Math.floor(relativeGrid[0].length / 2);
         const startPointZ = 0;
@@ -125,7 +163,9 @@ export class LocalLevelFinder {
 
         //Find path
         let grid = new PathFinding.Grid(relativeGrid);
-        let finder = new PathFinding.AStarFinder();
+        let finder = new PathFinding.AStarFinder({
+            heuristic: PathFinding.Heuristic.euclidean
+        });
         let path = finder.findPath(
             startPointX,
             startPointZ,
