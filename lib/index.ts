@@ -141,11 +141,15 @@ export class ServiceLayer {
         console.log(Object.values(ServiceLayer.initStatus));
         if (initCondition) {
             console.log("ServiceLayer.gridScale: ", ServiceLayer.gridScale);
-            fs.appendFile("/home/jiaming/Desktop/droneLog.txt", ServiceLayer.gridScale + "\n", err => {
-                if (err) {
-                    throw new Error(err.message);
+            fs.appendFile(
+                "/home/jiaming/Desktop/droneLog.txt",
+                ServiceLayer.gridScale + "\n",
+                err => {
+                    if (err) {
+                        throw new Error(err.message);
+                    }
                 }
-            })
+            );
             ServiceLayer.mapScale = new MapScale(
                 [5, 30],
                 [0, 0],
@@ -198,6 +202,28 @@ export class ServiceLayer {
         );
 
         ServiceLayer._finder = finder;
+
+        fs.appendFile(
+            "/home/jiaming/Desktop/droneResult.txt",
+            `
+            Current Location: ${ServiceLayer.currentLocation[0]}, ${
+                ServiceLayer.currentLocation[1]
+            }
+            Target Location: ${
+                ServiceLayer.pathPlanner.currentPath.endPoint[0]
+            }, ${ServiceLayer.pathPlanner.currentPath.endPoint[1]}
+            Input Obstacle Grid: ${stringData}
+            Output Path Relative: ${finder.targetPathRelative.map(value => {
+                return `[${value[0]}, ${value[1]}]`;
+            })}
+            Output path Global: ${finder.targetPathGlobal.map(value => {
+                return `[${value[0]}, ${value[1]}]`;
+            })}
+            `,
+            err => {
+                if (err) throw new Error(err.message);
+            }
+        );
 
         callback(finder);
     }
